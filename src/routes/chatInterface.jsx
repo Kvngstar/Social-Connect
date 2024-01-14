@@ -16,7 +16,7 @@ import './styles/chatInterface.css'
 export default function ChatInterface() {
     return (
         <div className="hero-section bg-primary">
-            <div className="side-menu                                                                                                                                                                                                                                                                                                                                                                                                                               ">
+            <div className="side-menu">
                 <div className="new-group d-none p-1">
                     <div className="fw-bold px-3">NEW CHAT</div>
                     <div className="px-3">
@@ -178,7 +178,7 @@ export default function ChatInterface() {
                     </div>
                 </div>
                 <div className="settings">
-                    <div className="bg-light settings-popup rounded">
+                    <div className="bg-light settings-popup rounded d-none">
                         <div className="group-menu bg-secondary d-flex flex-column">
                             <div className="bg-success">General</div>
                             <div>Account</div>
@@ -219,7 +219,7 @@ export default function ChatInterface() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="pt-3 px-3 pb-3 ">
+                            <div className="pt-3 px-3 pb-3 d-none">
                                 <div className="d-flex flex-column">
                                     <div>Social Connect for Web </div>
                                     <div>
@@ -256,13 +256,39 @@ export default function ChatInterface() {
                                             </a>
                                         </div>
                                         <hr />
-                                        <div>
-                                            2024 @ Social Connect Inc.
-                                        </div>
+                                        <div>2024 @ Social Connect Inc.</div>
                                     </div>
                                 </div>
                             </div>
-                            <div>{/* links */}</div>
+                            <div className="pt-3 px-3 pb-3">
+                                <div>
+                                    <img
+                                        src={displayImage}
+                                        className="round-image mb-2"
+                                        height="400px"
+                                        width="400px"
+                                        alt=""
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-between">
+                                    <div>{'<Devmonk>'} </div>
+                                    <div className="">edit</div>
+                                </div>
+                                <div className="d-flex justify-content-between  mt-2">
+                                    <div className="d-flex flex-column">
+                                        <div>About</div>
+                                        <div>Selfless and Kind</div>{' '} 
+                                    </div>
+                                    <div className="">edit</div>
+                                </div>
+                                <div className="d-flex justify-content-between mt-2">
+                                    <div className="d-flex flex-column ">
+                                        <div>phone number</div>
+                                        <div>09030299983</div>{' '}
+                                    </div>
+                                    <div className="">edit</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
