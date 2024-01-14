@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
 }
 .side-menu{
     width: 50px;
@@ -75,6 +76,13 @@
     text-indent: 7px;
     border-radius: 3px;
    
+}
+.input{
+    border: none !important;
+    width: 100%;
+    height: 30px;
+    text-indent: 7px !important;
+    border-radius: 3px !important;
 }
 .container-short-box{
     margin-top: 14px;
@@ -160,21 +168,91 @@ margin-left: 10px;
     width: 300px;
     height: 220px;
     background-color: cornflowerblue;
-    z-index: 2;
+    z-index: 1;
 }
 .new-group-overview{
+    height: 125px;
     overflow-y: scroll;
-    height: 300px;
+    /* background-color: aquamarine; */
+}
+.round-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
 }
 .create-new-group{
     position: absolute;
     transform: translate(-50%,-50%);
     left: 50%;
+    top: 150px;
+    width: 300px;
+    height: 282px;
+
+    background-color: rgb(139, 175, 199);
+    z-index: 1;
+}
+.process-new-group{
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
     top: 120px;
     width: 300px;
-    height: 220px;
-    background-color: rgb(139, 175, 199);
-    z-index: 2;
+    height: 230px;
+background-color: blueviolet;
+    z-index:3 ;
+}
+.profile-popup{
+    min-width: 400px;
+    z-index: 3;
+    position: absolute;
+    left: 0px;
+    display: flex;
+    left: 0;
+    height: 250px;
+
+}
+.settings-popup{
+    min-width: 300px;
+    z-index: 3;
+    position: absolute;
+    left: 0px;
+    display: flex;
+    left: 0;
+    height: 250px;
+}
+.group-menu{
+ min-width: 100px;
+}
+.group-menu > div{
+ padding: 6px 4px;
+}
+.group-menu > div:hover{
+ background-color: teal;
+}
+.view-group-menu{
+    width:calc(100% - 100px);
+    overflow-y: scroll;
+}
+.view-profile-menu{
+    width:calc(100% - 100px);
+    overflow-y: scroll;
+}
+.group-username-control{
+    width: 100px;
+    height: 23px;
+    overflow:hidden !important;
+}
+.settings{
+    min-width: 400px;
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    bottom: 10px;
+    left: 10px;
+    height: 300px;
+    /* background-color: rgb(245, 226, 49); */
 }
 
 @media screen and (max-width: 600px) {
