@@ -15,12 +15,12 @@
     display: flex;
     height: 100vh;
     background-color: burlywood;
-    /* width: 100%; */
+    width: 100%;
     position: relative;
     
 }
 .chat-section{
-    background-color: rgb(219, 135, 222);
+    /* background-color: rgb(167, 11, 172); */
     display: flex;
     width: 100%;
     
@@ -33,7 +33,7 @@
     
 }
 .space{
-    background-color: rgb(135, 139, 222);
+    /* background-color: rgb(135, 139, 222); */
     /* flex-grow: 5; */
     width: 65%;
 
@@ -101,10 +101,22 @@
     border-radius: 3px;
     /* background-color: coral; */
 }
+.long-chat-bar{
+    height: 60px;
+    border-radius: 3px;
+    /* background-color: coral; */
+}
 .short-box:hover{
     width: 100%;
     background-color: rgba(165, 199, 188, 0.727);
    
+}
+.handle-overflow{
+    overflow-x: hidden;
+    white-space: nowrap;
+    max-width: 200px;
+    
+    
 }
 .chat-box-top{
     display: flex;
@@ -132,11 +144,11 @@
 }
 .content-area{
     height: calc(100% - 95px);
-    background-color: rgb(255, 0, 212);
+    /* background-color: rgba(0, 184, 111, 0.426); */
 }
 .text-area{
     height: 33px;
-    background-color: aqua;
+    /* background-color: aqua; */
     width: 100%;
     display: flex;
     align-items: center;
@@ -268,7 +280,7 @@ background-color: blueviolet;
     }
   
     .space{
-        background-color: rgb(135, 139, 222);
+        /* background-color: rgb(135, 139, 222); */
         
      display: none;
         

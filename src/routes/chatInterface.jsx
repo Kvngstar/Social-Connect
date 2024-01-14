@@ -13,16 +13,17 @@ import smiley from '../../src/assets/images/smiley.svg'
 import attachment from '../../src/assets/images/attachment.svg'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
+import AdminChatPage from '../components/chatBox/adminChatBox.jsx'
 export default function ChatInterface() {
     return (
-        <div className="hero-section bg-primary">
+        <div className="hero-section">
             <div className="side-menu">
                 <div className="new-group d-none p-1">
                     <div className="fw-bold px-3">NEW CHAT</div>
                     <div className="px-3">
                         <input type="text" className="input" />
                     </div>
-                    <div className="d-flex mt-2 bg-light rounded py-2">
+                    <div className="d-flex mt-2 bg-light  rounded py-2">
                         <div className="me-2  px-3 ">
                             <img height="22px" src={groupAdd} alt="" />
                         </div>
@@ -36,7 +37,7 @@ export default function ChatInterface() {
                     </div>
                 </div>
 
-                <div className="create-new-group d-none p-2">
+                <div className="create-new-group d-block p-2">
                     <div className="fw-bold px-3">New Group</div>
                     <div className="px-3">
                         <input
@@ -178,7 +179,7 @@ export default function ChatInterface() {
                     </div>
                 </div>
                 <div className="settings">
-                    <div className="bg-light settings-popup rounded d-none">
+                    <div className="bg-light settings-popup rounded d-flex">
                         <div className="group-menu bg-secondary d-flex flex-column">
                             <div className="bg-success">General</div>
                             <div>Account</div>
@@ -186,7 +187,7 @@ export default function ChatInterface() {
                             <div>Help</div>
                         </div>
                         <div className="view-profile-menu">
-                            <div className="pt-3 px-3 pb-3 d-none">
+                            <div className="pt-3 px-3 pb-3">
                                 <div>General</div>
                                 <div className="mt-3 mb-2">
                                     <div className="mb-2">Language</div>
@@ -260,7 +261,7 @@ export default function ChatInterface() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="pt-3 px-3 pb-3">
+                            <div className="pt-3 px-3 pb-3 d-none">
                                 <div>
                                     <img
                                         src={displayImage}
@@ -277,7 +278,7 @@ export default function ChatInterface() {
                                 <div className="d-flex justify-content-between  mt-2">
                                     <div className="d-flex flex-column">
                                         <div>About</div>
-                                        <div>Selfless and Kind</div>{' '} 
+                                        <div>Selfless and Kind</div>{' '}
                                     </div>
                                     <div className="">edit</div>
                                 </div>
@@ -345,7 +346,7 @@ export default function ChatInterface() {
                     </div>
                 </div>
             </div>
-            <div className="chat-section bg-warning">
+            <div className="chat-section">
                 <div className="chats bg-danger">
                     <div className="center-bar">
                         <div>Chats</div>
@@ -369,23 +370,382 @@ export default function ChatInterface() {
                         />
                     </div>
                     <div className="container-short-box">
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
-                        <div className="short-box"></div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className=" short-box pe-2  rounded py-2">
+                            <div className="d-flex px-3 justify-content-between  align-items-center ">
+                                <div className="d-flex handle-overflow">
+                                    <div className="me-1">
+                                        <img
+                                            src={displayImage}
+                                            className="round-image"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="me-3 ">
+                                        <div>
+                                            Okoronkwo Kingsley Kelechwu
+                                            Okoronkwo Kingsley Kelechwu
+                                        </div>
+
+                                        <div>Last messages</div>
+                                    </div>
+                                </div>
+                                <div className="d-flex ps-3 justify-content-between">
+                                    <div className="d-flex flex-column">
+                                        <div>Yesterday</div>
+                                        <div className="align-self-end">
+                                            <span className="bg-success rounded px-1 text-light">
+                                                2
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="space bg-info position-relative">
+                <div className="space position-relative">
                     <div className="bg-light profile-popup rounded d-none">
                         <div className="group-menu bg-secondary d-flex flex-column">
                             <div className="bg-success">Overview </div>
@@ -627,7 +987,13 @@ export default function ChatInterface() {
                             </div>
                         </div>
                     </div>
-                    <div className="content-area"></div>
+                    <div className="content-area">
+                        <div>
+                            {/* others */}
+                            <AdminChatPage />
+                        </div>
+                        <div>{/* me */}</div>
+                    </div>
                     <div className="text-area">
                         <div className="icon-attachment">
                             <div>
