@@ -34,6 +34,7 @@
     border-radius: 10px;
     position: relative;
     margin-left: auto;
+    /* justify-self: ; */
     width: fit-content;
     font-size: small;
 }
@@ -51,6 +52,7 @@
     width: fit-content;
     position: relative;
     font-size: small;
+    
 }
 .admin_label {
     background-color: #25b6d32d !important;
@@ -61,7 +63,7 @@
 .textContainer {
     position: relative;
     margin: 15px 10px;
-    
+    /* display: flex; */
     background: #e3b448;
 }
 .toggleChatBox {

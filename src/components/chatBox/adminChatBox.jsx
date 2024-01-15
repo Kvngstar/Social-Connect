@@ -20,7 +20,7 @@ const AdminChatPage = () => {
                         return (
                             <div className="textContainer" key={index}>
                                 {v.status === 'customer' ? (
-                                    <div className="customer_textbox">
+                                    <div className=" customer_textbox">
                                         
                                             <span className='d-flex  mb-2'>
                                             <img
@@ -44,7 +44,7 @@ const AdminChatPage = () => {
                                         </span>
                                     </div>
                                 ) : (
-                                    <div className="admin_textbox ">
+                                    <div className=" me-4 admin_textbox ">
                                         <div className="d-flex mb-2">
                                             <img
                                                 src={man}

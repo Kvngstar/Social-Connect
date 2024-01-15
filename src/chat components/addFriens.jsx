@@ -4,7 +4,7 @@ import groupAdd from "../assets/images/group-add.svg"
 
 export default function AddFriends() {
   return (
-    <div className="d-block">
+    <div className="d-none">
                         <div className="d-flex  align-items-center mt-3">
                             <div className="w-50">
                                 <button className="btn  btn-primary btn-sm w-100">
