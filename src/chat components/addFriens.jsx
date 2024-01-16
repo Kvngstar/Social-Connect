@@ -2,9 +2,11 @@ import React from 'react'
 import groupAdd from "../assets/images/group-add.svg"
 
 
-export default function AddFriends() {
+export default function AddFriends({AddFriends,Next}) {
   return (
-    <div className="d-none">
+    <>
+    
+   { AddFriends && <div>
                         <div className="d-flex  align-items-center mt-3">
                             <div className="w-50">
                                 <button className="btn  btn-primary btn-sm w-100">
@@ -12,9 +14,9 @@ export default function AddFriends() {
                                 </button>
                             </div>
                             <div className="w-50">
-                                <button className="btn btn-warning btn-sm w-100">
+                                <button className="btn btn-warning btn-sm w-100" onClick={Next}>
                                     next
-                                </button>
+                                </button >
                             </div>
                         </div>
                         <div className="mt-2 mb-2">All friends</div>
@@ -26,7 +28,7 @@ export default function AddFriends() {
                                             height="22px"
                                             src={groupAdd}
                                             alt=""
-                                        />
+                                            />
                                     </div>
                                     <div>New user</div>
                                 </div>
@@ -45,7 +47,7 @@ export default function AddFriends() {
                                             height="22px"
                                             src={groupAdd}
                                             alt=""
-                                        />
+                                            />
                                     </div>
                                     <div>New user</div>
                                 </div>
@@ -54,7 +56,7 @@ export default function AddFriends() {
                                         type="checkbox"
                                         name="checkbox"
                                         id=""
-                                    />
+                                        />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between align-items-center pe-2 bg-light rounded py-2">
@@ -73,7 +75,7 @@ export default function AddFriends() {
                                         type="checkbox"
                                         name="checkbox"
                                         id=""
-                                    />
+                                        />
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between align-items-center pe-2 bg-light rounded py-2">
@@ -92,10 +94,12 @@ export default function AddFriends() {
                                         type="checkbox"
                                         name="checkbox"
                                         id=""
-                                    />
+                                        />
                                 </div>
                             </div>
                         </div>
                     </div>
-  )
+} 
+                                        </>
+ )
 }

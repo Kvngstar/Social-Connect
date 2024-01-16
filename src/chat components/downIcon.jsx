@@ -3,7 +3,7 @@ import setting from "../assets/images/settings.svg"
 import profile from "../assets/images/profile.svg"
 
 
-export default function DownIcon() {
+export default function DownIcon({toggleSettings}) {
   return (
     <div className="down-icon">
     {/* <div>
@@ -20,6 +20,7 @@ export default function DownIcon() {
             height="22px"
             width="auto"
             alt="status"
+            onClick={toggleSettings}
         />
     </div>
     <div>

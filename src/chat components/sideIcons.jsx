@@ -3,7 +3,7 @@ import chatIcon from "../assets/images/message.svg"
 import status from "../assets/images/add-whatsapp-status (1).svg"
 import call from "../assets/images/call.svg"
 
-export default function SideIcons() {
+export default function SideIcons({toggleNewChat}) {
   return (
     <div className="side-icon">
     <div>

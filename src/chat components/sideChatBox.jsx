@@ -2,7 +2,7 @@ import React from 'react'
 import groupAdd from "../assets/images/group-add.svg"
 import displayImage from "../assets/images/vi hub.jpg"
 
-export default function SideChatBox() {
+export default function SideChatBox({toggleNewChat}) {
   return (
 <div className="chats bg-light">
                     <div className="center-bar">
@@ -14,6 +14,7 @@ export default function SideChatBox() {
                                     height="22px"
                                     width="auto   "
                                     alt="status"
+                                    onClick={toggleNewChat}
                                 />
                             </div>
                         </div>

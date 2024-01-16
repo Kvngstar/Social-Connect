@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
 import AdminChatPage from '../components/chatBox/adminChatBox.jsx'
@@ -13,42 +13,138 @@ import ProfilePopUp from '../chat components/profilePopUp.jsx'
 import ChatBoxTop from '../chat components/chatBoxTop.js'
 import Textarea from '../chat components/textarea.jsx'
 export default function ChatInterface() {
-    const [controls,setControls ] = useState({
-        newgroup:false,
-        newuser: false,
+    const [controls, setControls] = useState({
+        newChat: false,
+        newGroup: false,
+        addFriends: false,
+        newUser: false,
         next: false,
-})
-const [groupMembers, setGroupMembers] = useState({
-    members:[],
-    groupNames:"",
-    groupImage:"",
-})
-    useEffect(() => {
+    })
+    const [settingsControls, setSettingsControls] = useState({
+        showSettings:false,
+        general: false,
+        account: false,
+        chats: false,
+        help: false,
+    })
 
+    // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
+    const [groupMembers, setGroupMembers] = useState({
+        members: [],
+        groupName: '',
+        groupImage: '',
+    })
+    const clearPopUpRef = useRef([])
+    function CreateNewChat(event) {
+        setControls((values) => {
+            return { ...values, newChat: !controls.newChat }
+        })
+    }
+    function NewGroup(event) {
+        setControls((values) => {
+            return {
+                ...values,
+                newChat: !controls.newChat,
+                newGroup: !controls.newGroup,
+                addFriends: !controls.addFriends,
+            }
+        })
+    }
+    function ScrollToNext() {
+        setControls((values) => {
+            return {
+                ...values,
+
+                addFriends: !controls.addFriends,
+                next: !controls.next,
+            }
+        })
+    }
+    function ClearGroupPopUpRef() {
+        setControls((values) => {
+            return {
+                newChat: false,
+                newGroup: false,
+                addFriends: false,
+                newUser: false,
+                next: false,
+            }
+        })
+
+        setSettingsControls((values) => {
+            return {
+                showSettings:false,
+                general: false,
+                account: false,
+                chats: false,
+                help: false,
+            }
+        })
+    }
+
+    // FUNCTIONS FOR HANDLING SETTINGS POP-UPS
+  function toggleSettings(){
+    setSettingsControls((values) => {
+        return {
+            showSettings:true,
+            general: true,
+            account: false,
+            chats: false,
+            help: false,
+        }
+    })
+  }
+    useEffect(() => {
+        clearPopUpRef.current.addEventListener('click', () => {
+            setControls((values) => {
+                return {
+                    newChat: false,
+                    newGroup: false,
+                    addFriends: false,
+                    newUser: false,
+                    next: false,
+                }
+            })
+
+            setSettingsControls((values) => {
+                return {
+                    showSettings:false,
+                    general: false,
+                    account: false,
+                    chats: false,
+                    help: false,
+                }
+            })
+        })
         return () => {}
     }, [])
     return (
         <div className="hero-section">
             <div className="side-menu">
-                <NewChat />
-                <div className="create-new-group d-block p-2">
-                    <div className="fw-bold px-3">New Group</div>
-                    <div className="px-3">
-                        <input
-                            placeholder="Search"
-                            type="text"
-                            className="w-100  input mt-2"
+                {controls.newChat && <NewChat CreateNewGroup={NewGroup} />}
+                {controls.newGroup && (
+                    <div className="create-new-group  p-2">
+                        <div className="fw-bold px-3">New Group</div>
+                        <div className="px-3">
+                            <input
+                                placeholder="Search"
+                                type="text"
+                                className="w-100  input mt-2"
+                            />
+                        </div>
+                        <AddFriends
+                            AddFriends={controls.addFriends}
+                            Next={ScrollToNext}
                         />
+                        {controls.next && <CreateNewGroup />}
                     </div>
-                    <AddFriends />
-                    <CreateNewGroup />
-                </div>
-                <Settings />
+                )}
+                <Settings clearPopUpRef={clearPopUpRef} settingsControls={settingsControls} setSettingsControls={setSettingsControls} />
                 <SideIcons />
-                <DownIcon />
+                <DownIcon toggleSettings={toggleSettings} />
             </div>
-            <div className="chat-section">
-                <SideChatBox />
+            <div className="chat-section" ref={clearPopUpRef}>
+                <SideChatBox toggleNewChat={CreateNewChat} />
                 <div className="space position-relative">
                     <ProfilePopUp />
                     <ChatBoxTop />

@@ -3,7 +3,7 @@ import groupAdd from "../assets/images/group-add.svg"
 import displayImage from "../assets/images/vi hub.jpg"
 export default function CreateNewGroup() {
   return (
-    <div> <div className="p-1 d-block">
+    <div> <div className="p-1">
     <div className="d-flex align-items-center mt-1 bg-light px-2 rounded py-2">
         <div>
             <img
@@ -25,11 +25,10 @@ export default function CreateNewGroup() {
                 placeholder="*mandatory"
             />
         </div>
-        <div className="d-flex bg-light rounded py-2">
-                <div className="me-2  px-3 ">
-                    <img height="22px" src={groupAdd} alt="" />
-                </div>
-                <div>New user</div>
+        <div className="d-flex mt-2 bg-light rounded py-2">
+                <div className="px-2  ">
+                    <input type="checkbox" name="" id="" />                </div>
+                <div>Private Group</div>
             </div>
         <div>
             <div className="d-flex  mt-5 align-items-center mt-3">
