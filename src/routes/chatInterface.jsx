@@ -28,6 +28,9 @@ export default function ChatInterface() {
         help: false,
     })
     const [showProfile, setShowProfile] = useState(false)
+    const [groupControl, setGroupControl] = useState({
+        
+    })
     const [showInputFor, setShowInputFor] = useState({
         name: false,
         about: false,
@@ -138,6 +141,14 @@ export default function ChatInterface() {
                     account: false,
                     chats: false,
                     help: false,
+                }
+            })
+
+            setShowInputFor((values) => {
+                return {
+                    name: false,
+                    about: false,
+                    phoneNo: false,
                 }
             })
         })

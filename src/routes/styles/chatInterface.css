@@ -188,11 +188,11 @@
     position: absolute;
     transform: translate(-50%, -50%);
     left: 50%;
-    top: 150px;
+    top: 200px;
     width: 300px;
-    height: 282px;
+    height: 340px;
 
-    background-color: rgb(139, 175, 199);
+    background-color: rgb(125, 173, 204);
     z-index: 1;
 }
 .process-new-group {
@@ -206,7 +206,7 @@
     z-index: 3;
 }
 .profile-popup {
-    min-width: 400px;
+    max-width: 400px;
     z-index: 3;
     position: absolute;
     left: 0px;

@@ -4,7 +4,7 @@ import displayImage from '../assets/images/vi hub.jpg'
 
 export default function ProfilePopUp() {
     return (
-        <div className="profile-popup rounded d-none">
+        <div className="profile-popup rounded d-flex">
             <div className="group-menu bg-secondary d-flex flex-column">
                 <div className="bg-success">Overview </div>
                 <div>Members</div>
