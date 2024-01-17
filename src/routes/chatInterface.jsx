@@ -21,11 +21,22 @@ export default function ChatInterface() {
         next: false,
     })
     const [settingsControls, setSettingsControls] = useState({
-        showSettings:false,
+        showSettings: false,
         general: false,
         account: false,
         chats: false,
         help: false,
+    })
+    const [showProfile, setShowProfile] = useState(false)
+    const [showInputFor, setShowInputFor] = useState({
+        name: false,
+        about: false,
+        phoneNo: false,
+    })
+    const [changeData, setChangeData] = useState({
+        name: '',
+        about: '',
+        phoneNo: '',
     })
 
     // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
@@ -73,7 +84,7 @@ export default function ChatInterface() {
 
         setSettingsControls((values) => {
             return {
-                showSettings:false,
+                showSettings: false,
                 general: false,
                 account: false,
                 chats: false,
@@ -83,17 +94,31 @@ export default function ChatInterface() {
     }
 
     // FUNCTIONS FOR HANDLING SETTINGS POP-UPS
-  function toggleSettings(){
-    setSettingsControls((values) => {
-        return {
-            showSettings:true,
-            general: true,
-            account: false,
-            chats: false,
-            help: false,
-        }
-    })
-  }
+    function toggleSettings() {
+        setSettingsControls((values) => {
+            return {
+                showSettings: true,
+                general: true,
+                account: false,
+                chats: false,
+                help: false,
+            }
+        })
+    }
+
+    // FUNCTIONS FOR HANDLING PROFILE POP-UPS
+    function ShowProfile() {
+        setShowProfile(true)
+        setSettingsControls((values) => {
+            return {
+                showSettings: true,
+                general: false,
+                account: false,
+                chats: false,
+                help: false,
+            }
+        })
+    }
     useEffect(() => {
         clearPopUpRef.current.addEventListener('click', () => {
             setControls((values) => {
@@ -108,7 +133,7 @@ export default function ChatInterface() {
 
             setSettingsControls((values) => {
                 return {
-                    showSettings:false,
+                    showSettings: false,
                     general: false,
                     account: false,
                     chats: false,
@@ -139,9 +164,21 @@ export default function ChatInterface() {
                         {controls.next && <CreateNewGroup />}
                     </div>
                 )}
-                <Settings clearPopUpRef={clearPopUpRef} settingsControls={settingsControls} setSettingsControls={setSettingsControls} />
+                <Settings
+                    clearPopUpRef={clearPopUpRef}
+                    settingsControls={settingsControls}
+                    setSettingsControls={setSettingsControls}
+                    showProfile={showProfile}
+                    setShowProfile={setShowProfile}
+                    showInputFor={showInputFor}
+                    setShowInputFor={setShowInputFor}
+                />
                 <SideIcons />
-                <DownIcon toggleSettings={toggleSettings} />
+                <DownIcon
+                    toggleSettings={toggleSettings}
+                    ShowProfile={ShowProfile}
+                    setShowProfile={setShowProfile}
+                />
             </div>
             <div className="chat-section" ref={clearPopUpRef}>
                 <SideChatBox toggleNewChat={CreateNewChat} />

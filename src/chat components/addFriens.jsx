@@ -75,7 +75,7 @@ export default function AddFriends({AddFriends,Next}) {
                                         type="checkbox"
                                         name="checkbox"
                                         id=""
-                                        />
+                                        /> 
                                 </div>
                             </div>
                             <div className="d-flex justify-content-between align-items-center pe-2 bg-light rounded py-2">

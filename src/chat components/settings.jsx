@@ -6,7 +6,12 @@ export default function Settings({
     clearPopUpRef,
     settingsControls,
     setSettingsControls,
+    showProfile,
+    setShowProfile,
+    showInputFor,
+    setShowInputFor,
 }) {
+    //FUNCTIONS THAT HANDLE CONDITIONAL RENDERING OF SETTINNGS
     function ShowAccount() {
         setSettingsControls((values) => {
             return {
@@ -17,6 +22,7 @@ export default function Settings({
                 help: false,
             }
         })
+        setShowProfile(false)
     }
     function ShowGeneral() {
         setSettingsControls((values) => {
@@ -28,6 +34,7 @@ export default function Settings({
                 help: false,
             }
         })
+        setShowProfile(false)
     }
     function ShowChats() {
         setSettingsControls((values) => {
@@ -39,6 +46,7 @@ export default function Settings({
                 help: false,
             }
         })
+        setShowProfile(false)
     }
     function ShowHelp() {
         setSettingsControls((values) => {
@@ -48,6 +56,46 @@ export default function Settings({
                 account: false,
                 chats: false,
                 help: true,
+            }
+        })
+        setShowProfile(false)
+    }
+    function ShowProfilee() {
+        setSettingsControls((values) => {
+            return {
+                showSettings: true,
+                general: false,
+                account: false,
+                chats: false,
+                help: false,
+            }
+        })
+        setShowProfile(true)
+    }
+
+    //FUNCTIONS THAT HANDLE CONDITIONAL RENDERING OF SETTINNGS
+    function EditName() {
+        console.log('name')
+        setShowInputFor((values) => {
+            return {
+                ...values,
+                name: !showInputFor.name,
+            }
+        })
+    }
+    function EditAbout() {
+        setShowInputFor((values) => {
+            return {
+                ...values,
+                about: !showInputFor.about,
+            }
+        })
+    }
+    function EditPhoneNo() {
+        setShowInputFor((values) => {
+            return {
+                ...values,
+                phoneNo: !showInputFor.phoneNo,
             }
         })
     }
@@ -67,6 +115,7 @@ export default function Settings({
                             <div onClick={ShowChats}>Notification</div>
                             <div onClick={ShowHelp}>Help</div>
                             <div onClick={ShowHelp}>Invite a Friend</div>
+                            <div onClick={ShowProfilee}>Profile</div>
                         </div>
                         <div className="view-profile-menu">
                             {settingsControls.general && (
@@ -135,18 +184,15 @@ export default function Settings({
                                         </div>
                                     </div>
                                     <div className="mb-1">Vibration</div>
-                                        <select
-                                            name="language"
-                                            className="form-select"
-                                            id=""
-                                        >
-                                            <option value="">
-                                                Default ~on~ 
-                                            </option>
-                                            <option value="">on</option>
-                                            <option value="">off</option>
-                                        </select>
-                                    
+                                    <select
+                                        name="language"
+                                        className="form-select"
+                                        id=""
+                                    >
+                                        <option value="">Default ~on~</option>
+                                        <option value="">on</option>
+                                        <option value="">off</option>
+                                    </select>
                                 </div>
                             )}
                             {settingsControls.account && (
@@ -229,35 +275,121 @@ export default function Settings({
                                     </div>
                                 </div>
                             )}
-                            <div className="pt-3 px-3 pb-3 d-none">
-                                <div>
-                                    <img
-                                        src={displayImage}
-                                        className="round-image mb-2"
-                                        height="400px"
-                                        width="400px"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="d-flex justify-content-between">
-                                    <div>{'<Devmonk>'} </div>
-                                    <div className="">edit</div>
-                                </div>
-                                <div className="d-flex justify-content-between  mt-2">
-                                    <div className="d-flex flex-column">
-                                        <div>About</div>
-                                        <div>Selfless and Kind</div>{' '}
+                            {showProfile && (
+                                <div className="pt-3 px-3 pb-3">
+                                    <div>
+                                        <img
+                                            src={displayImage}
+                                            className="round-image mb-2"
+                                            height="400px"
+                                            width="400px"
+                                            alt=""
+                                        />
                                     </div>
-                                    <div className="">edit</div>
-                                </div>
-                                <div className="d-flex justify-content-between mt-2">
-                                    <div className="d-flex flex-column ">
-                                        <div>phone number</div>
-                                        <div>09030299983</div>{' '}
+                                    <div className="">
+                                        {showInputFor.name == true ? (
+                                            <div className="d-flex justify-content-between flex-column">
+                                                <input
+                                                    type="text"
+                                                    name=""
+                                                    className="input"
+                                                    id=""
+                                                    placeholder="Change name"
+                                                />
+                                                <div className="mt-2">
+                                                    <button className="w-50 btn-primary btn btn-sm">
+                                                        change
+                                                    </button>
+                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditName}>
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="d-flex justify-content-between  mt-2">
+                                                <div>{'<Devmonk>'} </div>
+                                                <div
+                                                    className=""
+                                                    onClick={EditName}
+                                                >
+                                                    edit
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="">edit</div>
+
+                                    <div className=" mt-2">
+                                        {showInputFor.about === false ? (
+                                            <div className="d-flex justify-content-between">
+                                                <div className="d-flex flex-column">
+                                                    <div>About</div>
+                                                    <div>
+                                                        Selfless and Kind
+                                                    </div>{' '}
+                                                </div>
+                                                <div
+                                                    className=""
+                                                    onClick={EditAbout}
+                                                >
+                                                    edit
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="d-flex mb-2 flex-column">
+                                                <input
+                                                    type="text"
+                                                    name=""
+                                                    className="input"
+                                                    id=""
+                                                    placeholder="Change about"
+                                                />
+                                                <div className="mt-2">
+                                                    <button className="w-50 btn-primary btn btn-sm">
+                                                        change
+                                                    </button>
+                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditAbout}>
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="mt-2">
+                                        {showInputFor.phoneNo === false ? (
+                                            <div className="d-flex justify-content-between">
+                                                <div className="d-flex flex-column ">
+                                                    <div>phone number</div>
+                                                    <div>09030299983</div>{' '}
+                                                </div>
+                                                <div
+                                                    className=""
+                                                    onClick={EditPhoneNo}
+                                                >
+                                                    edit
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="d-flex mb-2 flex-column">
+                                                <input
+                                                    type="text"
+                                                    name=""
+                                                    className="input"
+                                                    id=""
+                                                    placeholder="Change phone no."
+                                                />
+                                                <div className="mt-2">
+                                                    <button className="w-50 btn-primary btn btn-sm">
+                                                        change
+                                                    </button>
+                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditPhoneNo}>
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
