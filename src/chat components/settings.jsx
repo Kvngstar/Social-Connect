@@ -300,7 +300,10 @@ export default function Settings({
                                                     <button className="w-50 btn-primary btn btn-sm">
                                                         change
                                                     </button>
-                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditName}>
+                                                    <button
+                                                        className="w-50 btn  btn-danger btn-sm"
+                                                        onClick={EditName}
+                                                    >
                                                         Cancel
                                                     </button>
                                                 </div>
@@ -335,7 +338,7 @@ export default function Settings({
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="d-flex mb-2 flex-column">
+                                            <div className="d-flex mt-4 mb-2 flex-column">
                                                 <input
                                                     type="text"
                                                     name=""
@@ -347,7 +350,10 @@ export default function Settings({
                                                     <button className="w-50 btn-primary btn btn-sm">
                                                         change
                                                     </button>
-                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditAbout}>
+                                                    <button
+                                                        className="w-50 btn  btn-danger btn-sm"
+                                                        onClick={EditAbout}
+                                                    >
                                                         Cancel
                                                     </button>
                                                 </div>
@@ -381,7 +387,10 @@ export default function Settings({
                                                     <button className="w-50 btn-primary btn btn-sm">
                                                         change
                                                     </button>
-                                                    <button className="w-50 btn  btn-danger btn-sm" onClick={EditPhoneNo}>
+                                                    <button
+                                                        className="w-50 btn  btn-danger btn-sm"
+                                                        onClick={EditPhoneNo}
+                                                    >
                                                         Cancel
                                                     </button>
                                                 </div>

@@ -29,17 +29,22 @@ export default function ChatInterface() {
     })
     const [showProfile, setShowProfile] = useState(false)
     const [groupControl, setGroupControl] = useState({
-        
+        showGroupProfile: false,
+        overview: false,
+        members: false,
+        media: false,
+        links: false,
     })
+    // For Change of Data 
     const [showInputFor, setShowInputFor] = useState({
         name: false,
-        about: false,
+        about: false, 
         phoneNo: false,
     })
-    const [changeData, setChangeData] = useState({
-        name: '',
-        about: '',
-        phoneNo: '',
+    const [showGroupInputFor, setGroupShowInputFor] = useState({
+        groupName: false,
+        description: false,
+        displayPhoto: false,
     })
 
     // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
@@ -122,6 +127,29 @@ export default function ChatInterface() {
             }
         })
     }
+    // SHOW GROUP PROFILE
+    function ShowGroupProfile() {
+        setGroupControl((values) => {
+            return {
+                showGroupProfile: true,
+                overview: true,
+                members: false,
+                media: false,
+                links: false,
+            }
+        })
+    }
+    function closeGroupPopUp() {
+        setGroupControl((values) => {
+            return {
+                showGroupProfile: false,
+                overview: false,
+                members: false,
+                media: false,
+                links: false,
+            }
+        })
+    }
     useEffect(() => {
         clearPopUpRef.current.addEventListener('click', () => {
             setControls((values) => {
@@ -156,7 +184,7 @@ export default function ChatInterface() {
     }, [])
     return (
         <div className="hero-section">
-            <div className="side-menu">
+            <div className="side-menu" onClick={closeGroupPopUp}>
                 {controls.newChat && <NewChat CreateNewGroup={NewGroup} />}
                 {controls.newGroup && (
                     <div className="create-new-group  p-2">
@@ -194,9 +222,14 @@ export default function ChatInterface() {
             <div className="chat-section" ref={clearPopUpRef}>
                 <SideChatBox toggleNewChat={CreateNewChat} />
                 <div className="space position-relative">
-                    <ProfilePopUp />
-                    <ChatBoxTop />
-                    <div className="content-area">
+                    <ProfilePopUp
+                        groupControl={groupControl}
+                        setGroupControl={setGroupControl}
+                        showGroupInputFor={showGroupInputFor}
+                         setGroupShowInputFor={setGroupShowInputFor}
+                    />
+                    <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
+                    <div className="content-area" onClick={closeGroupPopUp}>
                         <div>
                             {/* others */}
                             <AdminChatPage />

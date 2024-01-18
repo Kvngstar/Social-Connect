@@ -4,10 +4,10 @@ import call from '../assets/images/call.svg'
 import displayImage from '../assets/images/vi hub.jpg'
 import search from '../assets/images/search.svg'
 
-export default function ChatBoxTop() {
+export default function ChatBoxTop({ShowGroupProfile}) {
   return (
     <div className="chat-box-top">
-                        <div className="chat-box-top-img">
+                        <div className="chat-box-top-img" onClick={ShowGroupProfile}>
                             <div className="">
                                 <img src={displayImage} alt="image" />
                             </div>
