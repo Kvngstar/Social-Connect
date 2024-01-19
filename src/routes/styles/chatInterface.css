@@ -206,7 +206,8 @@
     z-index: 3;
 }
 .profile-popup {
-    max-width: 500px;
+    max-width: 700px;
+    min-width: 500px;
     z-index: 3;
     position: absolute;
     left: 0px;
@@ -256,7 +257,7 @@
     /* background-color: rgb(245, 226, 49); */
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .side-menu {
         width: 50px;
         background-color: rgb(148, 222, 135);
@@ -265,16 +266,23 @@
         background-color: rgb(206, 20, 150);
         height: 100%;
         width: 100%;
+        display: none;
     }
 
     .space {
         /* background-color: rgb(135, 139, 222); */
-
-        display: none;
+        width: 100%;
+        display: block;
     }
     .chat-section {
         background-color: rgb(219, 135, 222);
         display: block;
+        width: calc(100% - 50px);
+    
+    }
+    .profile-popup {
         width: 100%;
+        min-width: fit-content;
+        max-width: none;
     }
 }
