@@ -20,6 +20,7 @@ export default function ChatInterface() {
         newUser: false,
         next: false,
     })
+    const [loaded, setLoaded] = useState(false)
     const [settingsControls, setSettingsControls] = useState({
         showSettings: false,
         general: false,
@@ -35,10 +36,10 @@ export default function ChatInterface() {
         media: false,
         links: false,
     })
-    // For Change of Data 
+    // For Change of Data
     const [showInputFor, setShowInputFor] = useState({
         name: false,
-        about: false, 
+        about: false,
         phoneNo: false,
     })
     const [showGroupInputFor, setGroupShowInputFor] = useState({
@@ -221,23 +222,35 @@ export default function ChatInterface() {
             </div>
             <div className="chat-section" ref={clearPopUpRef}>
                 <SideChatBox toggleNewChat={CreateNewChat} />
-                <div className="space position-relative">
-                    <ProfilePopUp
-                        groupControl={groupControl}
-                        setGroupControl={setGroupControl}
-                        showGroupInputFor={showGroupInputFor}
-                         setGroupShowInputFor={setGroupShowInputFor}
-                    />
-                    <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
-                    <div className="content-area" onClick={closeGroupPopUp}>
-                        <div>
-                            {/* others */}
-                            <AdminChatPage />
+                {loaded ? (
+                    <div className="space position-relative">
+                        <ProfilePopUp
+                            groupControl={groupControl}
+                            setGroupControl={setGroupControl}
+                            showGroupInputFor={showGroupInputFor}
+                            setGroupShowInputFor={setGroupShowInputFor}
+                        />
+                        <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
+                        <div className="content-area" onClick={closeGroupPopUp}>
+                            <div>
+                                {/* others */}
+                                <AdminChatPage />
+                            </div>
+                            <div>{/* me */}</div>
                         </div>
-                        <div>{/* me */}</div>
+                        <Textarea />
                     </div>
-                    <Textarea />
-                </div>
+                ) : (
+                    <div className="d-flex align-items-center flex-column justify-content-center w-100 bg-dark text-light">
+                    <div className='fw-bolder'>
+                        
+                            Social Connect For Web
+                           
+                        </div>
+                        <div className='bg-success text-center'>A Messaging Platform for the web, text anytime  and reply anonymously</div>
+                        <br />
+                    </div>
+                )}
             </div>
         </div>
     )

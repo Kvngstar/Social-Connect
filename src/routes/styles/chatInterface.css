@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: rgb(148, 222, 135);
+    background-color: #198754;
 }
 .hero-section {
     display: flex;
@@ -101,7 +101,7 @@
 }
 .short-box:hover {
     width: 100%;
-    background-color: rgba(165, 199, 188, 0.727);
+    background-color:#198754a8;;
 }
 .handle-overflow {
     overflow-x: hidden;
@@ -206,8 +206,8 @@
     z-index: 3;
 }
 .profile-popup {
-    max-width: 700px;
-    min-width: 500px;
+    width: 400px;
+  
     z-index: 3;
     position: absolute;
     left: 0px;
@@ -257,7 +257,7 @@
     /* background-color: rgb(245, 226, 49); */
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 700px) {
     .side-menu {
         width: 50px;
         background-color: rgb(148, 222, 135);

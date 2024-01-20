@@ -4,7 +4,7 @@ import displayImage from "../assets/images/vi hub.jpg"
 
 export default function SideChatBox({toggleNewChat}) {
   return (
-<div className="chats bg-light">
+<div className="chats bg-dark text-light">
                     <div className="center-bar">
                         <div>Chats</div>
                         <div>
@@ -15,6 +15,7 @@ export default function SideChatBox({toggleNewChat}) {
                                     width="auto   "
                                     alt="status"
                                     onClick={toggleNewChat}
+                                    className='bg-light'
                                 />
                             </div>
                         </div>

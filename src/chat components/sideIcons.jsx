@@ -12,14 +12,16 @@ export default function SideIcons({toggleNewChat}) {
             height="22px"
             width="auto   "
             alt="chat-icon"
+            className='bg-light'
         />
     </div>
     <div>
         <img
             src={call}
             height="22px"
-            width="auto   "
+            width="auto"
             alt="call"
+            className='bg-light'
         />
     </div>
     <div>
@@ -28,6 +30,7 @@ export default function SideIcons({toggleNewChat}) {
             height="22px"
             width="auto   "
             alt="status"
+            className='bg-light'
         />
     </div>
 </div>

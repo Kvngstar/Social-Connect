@@ -21,6 +21,7 @@ export default function DownIcon({toggleSettings,ShowProfile}) {
             width="auto"
             alt="status"
             onClick={toggleSettings}
+            className='bg-light'
             />
     </div>
     <div>
@@ -30,6 +31,7 @@ export default function DownIcon({toggleSettings,ShowProfile}) {
             width="auto"
             alt="status"
             onClick={ShowProfile}
+            className='bg-light'
         />
     </div>
 </div>
