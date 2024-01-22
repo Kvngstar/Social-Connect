@@ -20,7 +20,7 @@ export default function ChatInterface() {
         newUser: false,
         next: false,
     })
-    const [loaded, setLoaded] = useState(false)
+    const [loaded, setLoaded] = useState(true)
     const [settingsControls, setSettingsControls] = useState({
         showSettings: false,
         general: false,
