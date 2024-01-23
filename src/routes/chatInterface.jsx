@@ -140,6 +140,22 @@ export default function ChatInterface() {
             }
         })
     }
+    function ToggleActiveNav(element) {
+        console.log(element)
+        element.stopPropagation();
+        let navItems = document.querySelectorAll('.nav-item')
+        navItems.forEach((item) => {
+            item.classList.remove('active-item')
+        })
+        if(element.target.localName != "img"){
+            
+            element.target.classList.add('active-item')
+        }
+        else{
+            element.target.parentElement.classList.add('active-item')
+
+        }
+    }
     function closeGroupPopUp() {
         setGroupControl((values) => {
             return {
@@ -181,6 +197,8 @@ export default function ChatInterface() {
                 }
             })
         })
+
+        // Get all nav-items
         return () => {}
     }, [])
     return (
@@ -213,8 +231,9 @@ export default function ChatInterface() {
                     showInputFor={showInputFor}
                     setShowInputFor={setShowInputFor}
                 />
-                <SideIcons />
+                <SideIcons ToggleActiveNav={ToggleActiveNav} />
                 <DownIcon
+                    ToggleActiveNav={ToggleActiveNav}
                     toggleSettings={toggleSettings}
                     ShowProfile={ShowProfile}
                     setShowProfile={setShowProfile}
@@ -242,12 +261,11 @@ export default function ChatInterface() {
                     </div>
                 ) : (
                     <div className="d-flex align-items-center flex-column justify-content-center w-100 bg-dark text-light">
-                    <div className='fw-bolder'>
-                        
-                            Social Connect For Web
-                           
+                        <div className="fw-bolder">Social Connect For Web</div>
+                        <div className="bg-success text-center">
+                            A Messaging Platform for the web, text anytime and
+                            reply anonymously
                         </div>
-                        <div className='bg-success text-center'>A Messaging Platform for the web, text anytime  and reply anonymously</div>
                         <br />
                     </div>
                 )}

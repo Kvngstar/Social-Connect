@@ -1,0 +1,26 @@
+.video-container{
+    height: 100vh !important;
+}
+.video-wrap{
+  
+    max-width: 700px;
+}
+.video-center{
+    height: 400px;
+    /* background-color: aquamarine; */
+}
+.calling::after{
+    content: "...";
+    animation: Dotted 3s infinite ;
+}
+@keyframes Dotted {
+    0%{
+        content: ".";
+    }
+    33.33%{
+        content: "..";
+    }
+    66.66%{
+        content: "...";
+    }
+}
