@@ -231,7 +231,7 @@
     padding: 6px 4px;
 }
 .group-menu > div:hover {
-    background-color: teal;
+    background-color: #f2f2f2a6;
 }
 .view-group-menu {
     width: calc(100% - 100px);
@@ -260,10 +260,15 @@
 .nav-item{
     
 }
+.nav-item-profile{
+
+}
 .active-item{
     border-left: 5px solid rgb(224, 170, 21);
     box-sizing: border-box;
-    transition: all 0.5s ease-in;
+    transition: all 0.2s ease-in;
+    background-color: #f2f2f2a6;
+    border-radius: 3px;
 }
 
 @media screen and (max-width: 700px) {

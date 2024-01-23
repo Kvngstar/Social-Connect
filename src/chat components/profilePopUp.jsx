@@ -7,6 +7,7 @@ export default function ProfilePopUp({
     setGroupControl,
     showGroupInputFor,
     setGroupShowInputFor,
+    ToggleProfileNav
 }) {
     function ShowMembers() {
         setGroupControl((values) => {
@@ -70,14 +71,7 @@ export default function ProfilePopUp({
             }
         })
     }
-    // function EditGroupInputForName() {
-    //     setGroupShowInputFor((values) => {
-    //         return {
-    //             ...values,
-    //             groupName: true,
-    //         }
-    //     })
-    // }
+  
     function EditGroupInputForDisplayPhoto() {
         setGroupShowInputFor((values) => {
             return {
@@ -90,13 +84,13 @@ export default function ProfilePopUp({
         <>
             {groupControl.showGroupProfile && (
                 <div className="profile-popup rounded d-flex">
-                    <div className="group-menu bg-secondary d-flex flex-column">
-                        <div className="bg-success" onClick={ShowOverview}>
+                    <div className="group-menu bg-secondary d-flex flex-column p-1">
+                        <div className="active-item nav-item-profile rounded" onClick={(event)=>{ShowOverview();ToggleProfileNav(event)}}>
                             Overview{' '}
                         </div>
-                        <div onClick={ShowMembers}>Members</div>
-                        <div onClick={ShowMedia}>Media</div>
-                        <div onClick={Showlinks}>Links</div>
+                        <div className='nav-item-profile rounded' onClick={(event)=>{ShowMembers();ToggleProfileNav(event)}}>Members</div>
+                        <div className='nav-item-profile rounded' onClick={(event)=>{ShowMedia();ToggleProfileNav(event)}}>Media</div>
+                        <div className='nav-item-profile rounded' onClick={(event)=>{Showlinks();ToggleProfileNav(event)}}>Links</div>
                     </div>
                     <div className="view-group-menu bg-light">
                         {groupControl.overview == true && (

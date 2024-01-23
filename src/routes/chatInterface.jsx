@@ -12,7 +12,11 @@ import SideChatBox from '../chat components/sideChatBox.jsx'
 import ProfilePopUp from '../chat components/profilePopUp.jsx'
 import ChatBoxTop from '../chat components/chatBoxTop.js'
 import Textarea from '../chat components/textarea.jsx'
+import PersonalProfilePopUp from '../chat components/personalChatProfilePopUp.jsx.jsx'
 export default function ChatInterface() {
+    const [loaded, setLoaded] = useState(true)
+    const clearPopUpRef = useRef([])
+    const [isPersonalChat, setIsPersonalChat] = useState(false)
     const [controls, setControls] = useState({
         newChat: false,
         newGroup: false,
@@ -20,7 +24,6 @@ export default function ChatInterface() {
         newUser: false,
         next: false,
     })
-    const [loaded, setLoaded] = useState(true)
     const [settingsControls, setSettingsControls] = useState({
         showSettings: false,
         general: false,
@@ -33,6 +36,12 @@ export default function ChatInterface() {
         showGroupProfile: false,
         overview: false,
         members: false,
+        media: false,
+        links: false,
+    })
+    const [personalChatControl, setPersonalChatControl] = useState({
+        showPersonalChatProfile: false,
+        overview: false,
         media: false,
         links: false,
     })
@@ -54,7 +63,6 @@ export default function ChatInterface() {
         groupName: '',
         groupImage: '',
     })
-    const clearPopUpRef = useRef([])
     function CreateNewChat(event) {
         setControls((values) => {
             return { ...values, newChat: !controls.newChat }
@@ -80,6 +88,7 @@ export default function ChatInterface() {
             }
         })
     }
+
     function ClearGroupPopUpRef() {
         setControls((values) => {
             return {
@@ -130,36 +139,65 @@ export default function ChatInterface() {
     }
     // SHOW GROUP PROFILE
     function ShowGroupProfile() {
-        setGroupControl((values) => {
-            return {
-                showGroupProfile: true,
-                overview: true,
-                members: false,
-                media: false,
-                links: false,
-            }
-        })
+        if (isPersonalChat) {
+            setPersonalChatControl((values) => {
+                return {
+                    showPersonalChatProfile: true,
+                    overview: true,
+                    media: false,
+                    links: false,
+                }
+            })
+        } else {
+            setGroupControl((values) => {
+                return {
+                    showGroupProfile: true,
+                    overview: true,
+                    members: false,
+                    media: false,
+                    links: false,
+                }
+            })
+        }
     }
     function ToggleActiveNav(element) {
+        element.stopPropagation()
         console.log(element)
-        element.stopPropagation();
         let navItems = document.querySelectorAll('.nav-item')
         navItems.forEach((item) => {
             item.classList.remove('active-item')
         })
-        if(element.target.localName != "img"){
-            
+        if (element.target.localName != 'img') {
             element.target.classList.add('active-item')
-        }
-        else{
+        } else {
             element.target.parentElement.classList.add('active-item')
-
+        }
+    }
+    function ToggleProfileNav(element) {
+        element.stopPropagation()
+        let navItems = document.querySelectorAll('.nav-item-profile')
+        navItems.forEach((item) => {
+            item.classList.remove('active-item')
+        })
+        if (element.target.localName != 'img') {
+            element.target.classList.add('active-item')
+        } else {
+            element.target.parentElement.classList.add('active-item')
         }
     }
     function closeGroupPopUp() {
         setGroupControl((values) => {
             return {
                 showGroupProfile: false,
+                overview: false,
+                members: false,
+                media: false,
+                links: false,
+            }
+        })
+        setPersonalChatControl((values) => {
+            return {
+                showPersonalChatProfile: false,
                 overview: false,
                 members: false,
                 media: false,
@@ -233,7 +271,7 @@ export default function ChatInterface() {
                 />
                 <SideIcons ToggleActiveNav={ToggleActiveNav} />
                 <DownIcon
-                    ToggleActiveNav={ToggleActiveNav}
+                    
                     toggleSettings={toggleSettings}
                     ShowProfile={ShowProfile}
                     setShowProfile={setShowProfile}
@@ -243,12 +281,21 @@ export default function ChatInterface() {
                 <SideChatBox toggleNewChat={CreateNewChat} />
                 {loaded ? (
                     <div className="space position-relative">
-                        <ProfilePopUp
-                            groupControl={groupControl}
-                            setGroupControl={setGroupControl}
-                            showGroupInputFor={showGroupInputFor}
-                            setGroupShowInputFor={setGroupShowInputFor}
-                        />
+                        {isPersonalChat ? (
+                            <PersonalProfilePopUp
+                                ToggleProfileNav={ToggleProfileNav}
+                                personalChatControl={personalChatControl}
+                                setPersonalChatControl={setPersonalChatControl}
+                            />
+                        ) : (
+                            <ProfilePopUp
+                                groupControl={groupControl}
+                                setGroupControl={setGroupControl}
+                                showGroupInputFor={showGroupInputFor}
+                                setGroupShowInputFor={setGroupShowInputFor}
+                                ToggleProfileNav={ToggleProfileNav}
+                            />
+                        )}
                         <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
                         <div className="content-area" onClick={closeGroupPopUp}>
                             <div>

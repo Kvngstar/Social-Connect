@@ -3,7 +3,7 @@ import setting from '../assets/images/settings.svg'
 import profile from '../assets/images/profile.svg'
 
 export default function DownIcon({
-    ToggleActiveNav,
+    
     toggleSettings,
     ShowProfile,
 }) {
@@ -19,7 +19,7 @@ export default function DownIcon({
     </div> */}
             <div className='p-1  nav-item'
                 onClick={(element) => {
-                    ToggleActiveNav(element)
+                   
                     toggleSettings()
                 }}
             
@@ -34,7 +34,7 @@ export default function DownIcon({
             <div
                 className="nav-item  p-1"
                 onClick={(element) => {
-                    ToggleActiveNav(element)
+              
                     ShowProfile()
                 }}
             
