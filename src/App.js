@@ -11,7 +11,7 @@ function App() {
         <Routes>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="chat" element={<Chat />} />
+            <Route path="chat" element={<ChatInterface />} />
             <Route path="video" element={<VideoCall/>} />
             <Route index element={<ChatInterface />} />
         </Routes>

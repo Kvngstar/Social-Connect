@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import './chat.css'
 import textdata from './jsontext'
 import man from '../../assets/images/profile.svg'
 import man2 from '../../assets/images/profile.svg'
-
-const AdminChatPage = () => {
+import getToken from "../../sessionManager/getToken"
+const AdminChatPage = ({groupChatDisplay}) => {
     const [showIcon, setShowIcon] = useState(false)
     const [text, setText] = useState('')
+    const token = getToken('x-auth')
 
     function getInput(event) {
         const { name, value } = event.target
@@ -16,31 +18,32 @@ const AdminChatPage = () => {
         <div className="messageUs rounded box-position">
             <div className="chatBox">
                 <div className="scrollable">
-                    {textdata.map((v, index) => {
+                    {groupChatDisplay.showGroupChat && groupChatDisplay.messages.map((v, index) => {
                         return (
                             <div className="textContainer" key={index}>
-                                {v.status === 'customer' ? (
+                                {jwtDecode(token)._id === v._userId ? (
                                     <div className=" customer_textbox">
-                                        
-                                            <span className='d-flex  mb-2'>
+                                        <span className="d-flex  mb-2">
                                             <img
-                                                    src={man2}
-                                                    className="mr-2 round-image"
-                                                    style={{height:"20px",width:"20px"}}
-                                                />
+                                                src={man2}
+                                                className="mr-2 round-image"
+                                                style={{
+                                                    height: '20px', 
+                                                    width: '20px',
+                                                }}
+                                            />
 
-                                                <div className="ralewaymeduim fontsize12">
-                                                    {' '}
-                                                    {v.message}
-                                                </div>
-                                            </span>
-                                            <span className="chat_date">
+                                            <div className="ralewaymeduim fontsize12">
                                                 {' '}
-                                                <span className="customer_label mr-1">
-                                                    me
-                                                </span>
-                                                {v.Time}
-                                            
+                                                {v.text}
+                                            </div>
+                                        </span>
+                                        <span className="chat_date">
+                                            {' '}
+                                            <span className="customer_label mr-1">
+                                                {v.username}
+                                            </span>
+                                            {v.date}
                                         </span>
                                     </div>
                                 ) : (
@@ -49,20 +52,23 @@ const AdminChatPage = () => {
                                             <img
                                                 src={man}
                                                 className="mr-2 round-image"
-                                                style={{height:"20px",width:"20px"}}
+                                                style={{
+                                                    height: '20px',
+                                                    width: '20px',
+                                                }}
                                                 alt=""
                                             />
                                             <div className="poppinsemibold fontsize12">
                                                 {' '}
-                                                {v.message}
+                                                {v.text}
                                             </div>
                                         </div>
                                         <span className="chat_date">
                                             {' '}
                                             <span className="admin_label mr-1">
-                                                admin
+                                                me
                                             </span>
-                                            {v.Time}
+                                            {v.date}
                                         </span>
                                     </div>
                                 )}

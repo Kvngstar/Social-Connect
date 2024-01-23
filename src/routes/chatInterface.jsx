@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './styles/chatInterface.css'
+import io from 'socket.io-client'
+    import { jwtDecode } from 'jwt-decode'
+
+import GetToken from '../sessionManager/getToken'
+import IsTokenExpired from '../sessionManager/isTokExpired'
 import AdminChatPage from '../components/chatBox/adminChatBox.jsx'
 import NewChat from '../chat components/newgroup.jsx'
 import CreateNewGroup from '../chat components/createNewGroup.jsx'
@@ -13,10 +16,30 @@ import ProfilePopUp from '../chat components/profilePopUp.jsx'
 import ChatBoxTop from '../chat components/chatBoxTop.js'
 import Textarea from '../chat components/textarea.jsx'
 import PersonalProfilePopUp from '../chat components/personalChatProfilePopUp.jsx.jsx'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './styles/chatInterface.css'
+import { useNavigate } from 'react-router-dom'
+
 export default function ChatInterface() {
-    const [loaded, setLoaded] = useState(true)
+    const [loaded, setLoaded] = useState(false)
     const clearPopUpRef = useRef([])
     const [isPersonalChat, setIsPersonalChat] = useState(false)
+    const [loadedData, setLoadedData] = useState([])
+    const [groupChatDisplay, setGroupChatDisplay] = useState({
+        showGroupChat: false,
+        profileImage: '',
+        name: '',
+        description: '',
+        date: '',
+        members: [],
+        link: '',
+        messages: [], 
+    })
+    const token = GetToken('x-auth')
+    const navigate = useNavigate()
+    let socket
+
     const [controls, setControls] = useState({
         newChat: false,
         newGroup: false,
@@ -185,6 +208,33 @@ export default function ChatInterface() {
             element.target.parentElement.classList.add('active-item')
         }
     }
+
+    function DisplayChats(
+        profileImage,
+        name,
+        description,
+        date,
+        members,
+        link,
+        messages
+    ) {
+        setGroupChatDisplay((values) => {
+            return {
+                ...values,
+                showGroupChat: true,
+                profileImage: profileImage,
+                name: name,
+                description: description,
+                date: date,
+                members: members,
+                link: link,
+                messages: messages,
+            }
+        })
+        setLoaded(true)
+
+
+    }
     function closeGroupPopUp() {
         setGroupControl((values) => {
             return {
@@ -205,7 +255,45 @@ export default function ChatInterface() {
             }
         })
     }
+    // CHECK IF USER IS  NOT LOGGED IN
+    //    if (!token) {
+    //     console.log('login out sha',token)
+    //     navigate('/login')
+    //     //  specify in the UI that the session expired and the user should login to continue
+    // } else if (token) {
+    //     if (IsTokenExpired(token) === true) {
+    //         navigate('/login')
+    //         console.log('login sha')
+    //     }
+    // }
+
     useEffect(() => {
+        // CHECK IF USER IS  NOT LOGGED IN
+        if (!token) {
+            console.log('login out sha')
+            navigate('/login')
+            //  specify in the UI that the session expired and the user should login to continue
+        } else if (token) {
+            if (IsTokenExpired(token) === true) {
+                navigate('/login')
+                console.log('login sha')
+            } else {
+                console.log('login sha')
+            }
+        }
+
+        // ESTABLISH THE SOCKET CONNECTION
+        socket = io('http://localhost:3001/chat', {
+            transports: ['websocket'],
+            query: { token },
+        })
+
+        socket.on('group-information', (data) => {
+            console.log(data)
+            setLoadedData(data)
+            // setLoaded((value) => true)
+        })
+
         clearPopUpRef.current.addEventListener('click', () => {
             setControls((values) => {
                 return {
@@ -271,14 +359,17 @@ export default function ChatInterface() {
                 />
                 <SideIcons ToggleActiveNav={ToggleActiveNav} />
                 <DownIcon
-                    
                     toggleSettings={toggleSettings}
                     ShowProfile={ShowProfile}
                     setShowProfile={setShowProfile}
                 />
             </div>
             <div className="chat-section" ref={clearPopUpRef}>
-                <SideChatBox toggleNewChat={CreateNewChat} />
+                <SideChatBox
+                    toggleNewChat={CreateNewChat}
+                    loadedData={loadedData}
+                    DisplayChats={DisplayChats}
+                />
                 {loaded ? (
                     <div className="space position-relative">
                         {isPersonalChat ? (
@@ -299,10 +390,10 @@ export default function ChatInterface() {
                         <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
                         <div className="content-area" onClick={closeGroupPopUp}>
                             <div>
-                                {/* others */}
-                                <AdminChatPage />
+                                <AdminChatPage
+                                    groupChatDisplay={groupChatDisplay}
+                                />
                             </div>
-                            <div>{/* me */}</div>
                         </div>
                         <Textarea />
                     </div>

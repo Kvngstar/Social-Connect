@@ -23,10 +23,10 @@ export default function Chat() {
 
     const chat = useRef()
 
-    socket = io('http://localhost:3001/chat', {
-        transports: ['websocket'],
-        query: { token },
-    })
+    // socket = io('http://localhost:3001/chat', {
+    //     transports: ['websocket'],
+    //     query: { token },
+    // })
 
     useEffect(() => {
         if (!token) {
