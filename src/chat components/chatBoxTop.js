@@ -4,12 +4,12 @@ import call from '../assets/images/call.svg'
 import displayImage from '../assets/images/vi hub.jpg'
 import search from '../assets/images/search.svg'
 
-export default function ChatBoxTop({ShowGroupProfile}) {
+export default function ChatBoxTop({ShowGroupProfile,groupChatDisplay}) {
   return (
     <div className="chat-box-top">
                         <div className="chat-box-top-img" onClick={ShowGroupProfile}>
                             <div className="">
-                                <img src={displayImage} alt="image" />
+                                <img src={groupChatDisplay.profileImage} alt="image" />
                             </div>
                             <div>Devmonk Technologies</div>
                         </div>

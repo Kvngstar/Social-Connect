@@ -7,7 +7,8 @@ export default function ProfilePopUp({
     setGroupControl,
     showGroupInputFor,
     setGroupShowInputFor,
-    ToggleProfileNav
+    ToggleProfileNav,
+    groupChatDisplay,
 }) {
     function ShowMembers() {
         setGroupControl((values) => {
@@ -62,7 +63,7 @@ export default function ProfilePopUp({
             }
         })
     }
-    function EditGroupInputForDescription(){
+    function EditGroupInputForDescription() {
         console.log('Descrtiption Edit Block')
         setGroupShowInputFor((values) => {
             return {
@@ -71,7 +72,7 @@ export default function ProfilePopUp({
             }
         })
     }
-  
+
     function EditGroupInputForDisplayPhoto() {
         setGroupShowInputFor((values) => {
             return {
@@ -82,22 +83,52 @@ export default function ProfilePopUp({
     }
     return (
         <>
-            {groupControl.showGroupProfile && (
+                {groupControl.showGroupProfile && groupChatDisplay.showGroupChat && (
                 <div className="profile-popup rounded d-flex">
                     <div className="group-menu bg-secondary d-flex flex-column p-1">
-                        <div className="active-item nav-item-profile rounded" onClick={(event)=>{ShowOverview();ToggleProfileNav(event)}}>
+                        <div
+                            className="active-item nav-item-profile rounded"
+                            onClick={(event) => {
+                                ShowOverview()
+                                ToggleProfileNav(event)
+                            }}
+                        >
                             Overview{' '}
                         </div>
-                        <div className='nav-item-profile rounded' onClick={(event)=>{ShowMembers();ToggleProfileNav(event)}}>Members</div>
-                        <div className='nav-item-profile rounded' onClick={(event)=>{ShowMedia();ToggleProfileNav(event)}}>Media</div>
-                        <div className='nav-item-profile rounded' onClick={(event)=>{Showlinks();ToggleProfileNav(event)}}>Links</div>
+                        <div
+                            className="nav-item-profile rounded"
+                            onClick={(event) => {
+                                ShowMembers()
+                                ToggleProfileNav(event)
+                            }}
+                        >
+                            Members
+                        </div>
+                        <div
+                            className="nav-item-profile rounded"
+                            onClick={(event) => {
+                                ShowMedia()
+                                ToggleProfileNav(event)
+                            }}
+                        >
+                            Media
+                        </div>
+                        <div
+                            className="nav-item-profile rounded"
+                            onClick={(event) => {
+                                Showlinks()
+                                ToggleProfileNav(event)
+                            }}
+                        >
+                            Links
+                        </div>
                     </div>
                     <div className="view-group-menu bg-light">
                         {groupControl.overview == true && (
                             <div className="pt-3 px-3 pb-3 d-block">
                                 <div>
                                     <img
-                                        src={displayImage}
+                                        src={groupChatDisplay.profileImage}
                                         className="round-image"
                                         height="300px"
                                         width="300px"
@@ -127,7 +158,7 @@ export default function ProfilePopUp({
                                     </div>
                                 ) : (
                                     <div className="d-flex justify-content-between">
-                                        <div>CHOSEN CAMPUS LIGHT, FUTO</div>
+                                        <div>{groupChatDisplay.name}</div>
                                         <div
                                             className=""
                                             onClick={EditGroupInputForName}
@@ -139,7 +170,7 @@ export default function ProfilePopUp({
                                 <div>
                                     Created
                                     <br />
-                                    7/20/2017 9:48 PM
+                                    {groupChatDisplay.date}
                                 </div>
                                 {showGroupInputFor.description ? (
                                     <div className="d-flex mb-2 flex-column">
@@ -156,7 +187,9 @@ export default function ProfilePopUp({
                                             </button>
                                             <button
                                                 className="w-50 btn  btn-danger btn-sm"
-                                               onClick={EditGroupInputForDescription}
+                                                onClick={
+                                                    EditGroupInputForDescription
+                                                }
                                             >
                                                 Cancel
                                             </button>
@@ -169,10 +202,7 @@ export default function ProfilePopUp({
                                             <br />
                                             <div>
                                                 <p>
-                                                    The Lord Chosen Campus
-                                                    Fellowship, FUTO has been
-                                                    birthed to help in achieving
-                                                    the vision.
+                                                   {groupChatDisplay.description}
                                                     <div className="d-none">
                                                         <p>
                                                             We trust God for His
@@ -202,12 +232,15 @@ export default function ProfilePopUp({
                                                 <div>show more</div>
                                             </div>
                                         </div>
-                                        <div  onClick={
-                                                    EditGroupInputForDescription
-                                                }>edit</div>
+                                        <div
+                                            onClick={
+                                                EditGroupInputForDescription
+                                            }
+                                        >
+                                            edit
+                                        </div>
                                     </div>
                                 )}
-                              
                             </div>
                         )}
 

@@ -385,9 +385,10 @@ export default function ChatInterface() {
                                 showGroupInputFor={showGroupInputFor}
                                 setGroupShowInputFor={setGroupShowInputFor}
                                 ToggleProfileNav={ToggleProfileNav}
+                                groupChatDisplay={groupChatDisplay}
                             />
                         )}
-                        <ChatBoxTop ShowGroupProfile={ShowGroupProfile} />
+                        <ChatBoxTop groupChatDisplay={groupChatDisplay} ShowGroupProfile={ShowGroupProfile} />
                         <div className="content-area" onClick={closeGroupPopUp}>
                             <div>
                                 <AdminChatPage
