@@ -231,7 +231,25 @@ export default function ChatInterface() {
                 messages: messages,
             }
         })
+        setGroupControl((values) => {
+            return {
+                showGroupProfile: false,
+                overview: false,
+                members: false,
+                media: false,
+                links: false,
+            }
+        })
+        setPersonalChatControl((values) => {
+            return {
+                showPersonalChatProfile: false,
+                overview: false,
+                media: false,
+                links: false,
+            }
+        })
         setLoaded(true)
+
 
 
     }

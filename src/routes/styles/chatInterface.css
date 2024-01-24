@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    transition: all 0.21s ease-in;
 }
 .side-menu {
     width: 50px;
@@ -101,7 +102,7 @@
 }
 .short-box:hover {
     width: 100%;
-    background-color:#198754a8;;
+    background-color:#198754a8;
 }
 .handle-overflow {
     overflow-x: hidden;
@@ -112,7 +113,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: rgba(228, 246, 90, 0.846);
+    background-color: #198754;
 }
 .chat-box-top-img {
     display: flex;

@@ -11,7 +11,7 @@ export default function ChatBoxTop({ShowGroupProfile,groupChatDisplay}) {
                             <div className="">
                                 <img src={groupChatDisplay.profileImage} alt="image" />
                             </div>
-                            <div>Devmonk Technologies</div>
+                            <div>{groupChatDisplay.name} </div>
                         </div>
                         <div className="action-icons">
                             <div>

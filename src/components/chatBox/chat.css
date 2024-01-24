@@ -64,7 +64,7 @@
     position: relative;
     margin: 15px 10px;
     /* display: flex; */
-    background: #e3b448;
+    /* background: #e3b448; */
 }
 .toggleChatBox {
     display: none;
@@ -77,7 +77,7 @@
     /* max-width: 800px; */
     margin: auto;
     display: block;
-    background-color: goldenrod;
+    background-color:#198754dd;
     position: relative;
     overflow-y: scroll;
     
