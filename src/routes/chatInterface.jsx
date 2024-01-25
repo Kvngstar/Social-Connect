@@ -229,6 +229,7 @@ export default function ChatInterface() {
                 members: members,
                 link: link,
                 messages: messages,
+                adminUsername: adminUsername,
             }
         })
         setGroupControl((values) => {
@@ -248,10 +249,8 @@ export default function ChatInterface() {
                 links: false,
             }
         })
+
         setLoaded(true)
-
-
-
     }
     function closeGroupPopUp() {
         setGroupControl((values) => {
@@ -273,17 +272,11 @@ export default function ChatInterface() {
             }
         })
     }
-    // CHECK IF USER IS  NOT LOGGED IN
-    //    if (!token) {
-    //     console.log('login out sha',token)
-    //     navigate('/login')
-    //     //  specify in the UI that the session expired and the user should login to continue
-    // } else if (token) {
-    //     if (IsTokenExpired(token) === true) {
-    //         navigate('/login')
-    //         console.log('login sha')
-    //     }
-    // }
+    function ClearImgInput(){
+        setInputData((values) => {
+            return { ...values, type: "", text: "",disableIput: false }
+        })
+    }
 
     useEffect(() => {
         // CHECK IF USER IS  NOT LOGGED IN
