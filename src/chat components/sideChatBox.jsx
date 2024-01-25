@@ -85,7 +85,11 @@ export default function SideChatBox({
                                             <div>Yesterday</div>
                                             <div className="align-self-end">
                                                 <span className="bg-success rounded px-1 text-light">
-                                                   {jwtDecode(token).groups[num].numberOfNewMessages}
+                                                    {
+                                                        jwtDecode(token).groups[
+                                                            num
+                                                        ].numberOfNewMessages
+                                                    }
                                                 </span>
                                             </div>
                                         </div>
