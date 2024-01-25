@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
-    import { jwtDecode } from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 
 import GetToken from '../sessionManager/getToken'
 import IsTokenExpired from '../sessionManager/isTokExpired'
@@ -19,13 +20,18 @@ import PersonalProfilePopUp from '../chat components/personalChatProfilePopUp.js
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
-import { useNavigate } from 'react-router-dom'
+import PreviewImage from '../components/preview.jsx';
 
 export default function ChatInterface() {
     const [loaded, setLoaded] = useState(false)
     const clearPopUpRef = useRef([])
     const [isPersonalChat, setIsPersonalChat] = useState(false)
     const [loadedData, setLoadedData] = useState([])
+    const [showProfile, setShowProfile] = useState(false)
+    const [imagePreview, setImagePreview] = useState('')
+    const token = GetToken('x-auth')
+    const navigate = useNavigate()
+    let socket
     const [groupChatDisplay, setGroupChatDisplay] = useState({
         showGroupChat: false,
         profileImage: '',
@@ -34,12 +40,25 @@ export default function ChatInterface() {
         date: '',
         members: [],
         link: '',
-        messages: [], 
+        messages: [],
     })
-    const token = GetToken('x-auth')
-    const navigate = useNavigate()
-    let socket
+    // Handle User input both text, image, audio and video call
+    const [inputData, setInputData] = useState({
+        disableInput: false,
+        type: '',
+        text: '',
+        username: jwtDecode(token).username,
+        _userId: jwtDecode(token)._id,
+    })
 
+    function HandleInputs(event) {
+        const { name, value } = event.target
+        setInputData((values) => {
+            return { ...values, type: name, text: value }
+        })
+        console.log(inputData)
+    }
+    function SendInputToServer() {}
     const [controls, setControls] = useState({
         newChat: false,
         newGroup: false,
@@ -54,7 +73,6 @@ export default function ChatInterface() {
         chats: false,
         help: false,
     })
-    const [showProfile, setShowProfile] = useState(false)
     const [groupControl, setGroupControl] = useState({
         showGroupProfile: false,
         overview: false,
@@ -79,13 +97,13 @@ export default function ChatInterface() {
         description: false,
         displayPhoto: false,
     })
-
-    // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
     const [groupMembers, setGroupMembers] = useState({
         members: [],
         groupName: '',
         groupImage: '',
     })
+
+    // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
     function CreateNewChat(event) {
         setControls((values) => {
             return { ...values, newChat: !controls.newChat }
@@ -216,7 +234,8 @@ export default function ChatInterface() {
         date,
         members,
         link,
-        messages
+        messages,
+        adminUsername
     ) {
         setGroupChatDisplay((values) => {
             return {
@@ -333,6 +352,9 @@ export default function ChatInterface() {
                     phoneNo: false,
                 }
             })
+            // if(inputData.disableInput === false){
+            //     alert("image will be disgarded")
+            // }
         })
 
         // Get all nav-items
@@ -399,15 +421,28 @@ export default function ChatInterface() {
                                 groupChatDisplay={groupChatDisplay}
                             />
                         )}
-                        <ChatBoxTop groupChatDisplay={groupChatDisplay} ShowGroupProfile={ShowGroupProfile} />
-                        <div className="content-area" onClick={closeGroupPopUp}>
+                        <ChatBoxTop
+                            groupChatDisplay={groupChatDisplay}
+                            ShowGroupProfile={ShowGroupProfile}
+                        />
+                        <div
+                            className="content-area position-relative"
+                            onClick={closeGroupPopUp}
+                        >
                             <div>
                                 <AdminChatPage
                                     groupChatDisplay={groupChatDisplay}
                                 />
                             </div>
+                            {inputData.type == 'image' && (
+                                    <PreviewImage previewimg={inputData.text} ClearImgInput={ClearImgInput}/>
+                            )}
                         </div>
-                        <Textarea />
+                        <Textarea
+                            HandleInputs={HandleInputs}
+                            inputData={inputData}
+                            setInputData={setInputData}
+                        />
                     </div>
                 ) : (
                     <div className="d-flex align-items-center flex-column justify-content-center w-100 bg-dark text-light">

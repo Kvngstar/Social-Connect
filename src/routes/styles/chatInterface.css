@@ -89,6 +89,7 @@
 ::-webkit-scrollbar {
     width: 0;
     display: block;
+    justify-self: end;
 }
 .short-box {
     height: 60px;
@@ -137,13 +138,21 @@
     height: calc(100% - 95px);
     /* background-color: rgba(0, 184, 111, 0.426); */
 }
+.preview-image{
+position: absolute;
+z-index: 2;
+height: 170px;
+width: 200px;
+background-color: antiquewhite;
+bottom: 0;
+}
 .text-area {
     height: 33px;
     /* background-color: aqua; */
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between !important;
 }
 .icon-attachment {
     display: flex;
