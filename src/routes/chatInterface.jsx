@@ -17,23 +17,36 @@ import ProfilePopUp from '../chat components/profilePopUp.jsx'
 import ChatBoxTop from '../chat components/chatBoxTop.js'
 import Textarea from '../chat components/textarea.jsx'
 import PersonalProfilePopUp from '../chat components/personalChatProfilePopUp.jsx.jsx'
+import PreviewImage from '../components/preview.jsx'
+import root from '../index.js'
+import _, { get } from 'lodash'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
-import PreviewImage from '../components/preview.jsx';
 
 export default function ChatInterface() {
     const [loaded, setLoaded] = useState(false)
+    const [activeChat, setActiveChat] = useState('')
     const clearPopUpRef = useRef([])
     const [isPersonalChat, setIsPersonalChat] = useState(false)
     const [loadedData, setLoadedData] = useState([])
     const [showProfile, setShowProfile] = useState(false)
-    const [imagePreview, setImagePreview] = useState('')
+    const [lastMessage, setLastMessage] = useState('')
+    const [reload, setReloaded] = useState(0)
+    const scrollTo = useRef()
+    const getDom = useRef()
     const token = GetToken('x-auth')
     const navigate = useNavigate()
     let socket
+    var idd
+    // ESTABLISH THE SOCKET CONNECTION
+    socket = io('http://localhost:3001/chat', {
+        transports: ['websocket'],
+        query: { token },
+    })
     const [groupChatDisplay, setGroupChatDisplay] = useState({
         showGroupChat: false,
+        groupId: '',
         profileImage: '',
         name: '',
         description: '',
@@ -41,6 +54,7 @@ export default function ChatInterface() {
         members: [],
         link: '',
         messages: [],
+        lastMessage: '',
     })
     // Handle User input both text, image, audio and video call
     const [inputData, setInputData] = useState({
@@ -51,14 +65,6 @@ export default function ChatInterface() {
         _userId: jwtDecode(token)._id,
     })
 
-    function HandleInputs(event) {
-        const { name, value } = event.target
-        setInputData((values) => {
-            return { ...values, type: name, text: value }
-        })
-        console.log(inputData)
-    }
-    function SendInputToServer() {}
     const [controls, setControls] = useState({
         newChat: false,
         newGroup: false,
@@ -102,6 +108,12 @@ export default function ChatInterface() {
         groupName: '',
         groupImage: '',
     })
+    // For Creating New Group
+    const [newGroupData, setGroupData] = useState({
+        groupIcon: '',
+        groupName: '',
+        groupDescription: '',
+    })
 
     // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
     function CreateNewChat(event) {
@@ -114,40 +126,7 @@ export default function ChatInterface() {
             return {
                 ...values,
                 newChat: !controls.newChat,
-                newGroup: !controls.newGroup,
-                addFriends: !controls.addFriends,
-            }
-        })
-    }
-    function ScrollToNext() {
-        setControls((values) => {
-            return {
-                ...values,
-
-                addFriends: !controls.addFriends,
                 next: !controls.next,
-            }
-        })
-    }
-
-    function ClearGroupPopUpRef() {
-        setControls((values) => {
-            return {
-                newChat: false,
-                newGroup: false,
-                addFriends: false,
-                newUser: false,
-                next: false,
-            }
-        })
-
-        setSettingsControls((values) => {
-            return {
-                showSettings: false,
-                general: false,
-                account: false,
-                chats: false,
-                help: false,
             }
         })
     }
@@ -235,11 +214,13 @@ export default function ChatInterface() {
         members,
         link,
         messages,
-        adminUsername
+        adminUsername,
+        chatId
     ) {
         setGroupChatDisplay((values) => {
             return {
                 ...values,
+                groupId: chatId,
                 showGroupChat: true,
                 profileImage: profileImage,
                 name: name,
@@ -269,8 +250,10 @@ export default function ChatInterface() {
             }
         })
 
+        setActiveChat(() => chatId)
         setLoaded(true)
     }
+
     function closeGroupPopUp() {
         setGroupControl((values) => {
             return {
@@ -291,98 +274,161 @@ export default function ChatInterface() {
             }
         })
     }
-    function ClearImgInput(){
+
+    function ClearImgInput() {
         setInputData((values) => {
-            return { ...values, type: "", text: "",disableIput: false }
+            return { ...values, type: '', text: '', disableInput: false }
         })
+    }
+
+    // Function send Message to Group
+    function SendInformation() {
+        socket.emit(activeChat, _.omit(inputData, ['disableInput']))
+
+        setInputData((values) => {
+            return { ...values, type: '', text: '', disableInput: false }
+        })
+    }
+    // Function to submit new Group Profile
+
+    function SubmitNewGroup() {
+        socket.emit('NewGroup', newGroupData)
+    }
+    function CloseUpClone() {
+        setControls((values) => {
+            return {
+                newChat: false,
+                newGroup: false,
+                addFriends: false,
+                newUser: false,
+                next: false,
+            }
+        })
+
+        setSettingsControls((values) => {
+            return {
+                showSettings: false,
+                general: false,
+                account: false,
+                chats: false,
+                help: false,
+            }
+        })
+
+        setShowInputFor((values) => {
+            return {
+                name: false,
+                about: false,
+                phoneNo: false,
+            }
+        })
+    }
+    // SEND USER MESSAGE TO SERVER
+    function HandleInputs(event) {
+        const { name, value } = event.target
+        setInputData((values) => {
+            return { ...values, type: name, text: value, groupId: activeChat }
+        })
+    }
+    // APPEND RECIECEVED MESSAGE FROM SERVER
+    function AppendRecievedMessage() {}
+
+    function AppendedDom(v) {
+        const parentDom = getDom.current
+        console.log(parentDom, 'parentDom')
+        const wrapper = document.createElement('div')
+        wrapper.className = 'textContainer'
+
+        const mainNewDiv = document.createElement('div')
+        mainNewDiv.className = 'customer_textbox'
+
+        if (v.type == 'image') {
+            const newDiv = document.createElement('div')
+            const newImg = document.createElement('img')
+            newImg.style.height = '200px'
+            newImg.src = v.msg
+            newImg.alt = 'new image'
+            newDiv.append(newImg)
+            mainNewDiv.appendChild(newDiv)
+        } else if (v.type == 'text') {
+            const newSpan = document.createElement('span')
+            newSpan.className = 'd-flex mb-2'
+
+            const newImg = document.createElement('img')
+            newImg.style.height = '20px'
+            newImg.style.height = '20px'
+            newImg.src = ''
+            newImg.className = 'mr-2 round-image'
+
+            const newDiv = document.createElement('div')
+            newDiv.className = 'ralewaymeduim fontsize12'
+            newDiv.textContent = v.msg
+            newSpan.appendChild(newImg)
+            newSpan.appendChild(newDiv)
+            mainNewDiv.appendChild(newSpan)
+        }
+        wrapper.appendChild(mainNewDiv)
+        parentDom.appendChild(wrapper)
     }
 
     useEffect(() => {
         // CHECK IF USER IS  NOT LOGGED IN
         if (!token) {
-            console.log('login out sha')
             navigate('/login')
             //  specify in the UI that the session expired and the user should login to continue
         } else if (token) {
             if (IsTokenExpired(token) === true) {
                 navigate('/login')
-                console.log('login sha')
             } else {
-                console.log('login sha')
             }
         }
-
-        // ESTABLISH THE SOCKET CONNECTION
-        socket = io('http://localhost:3001/chat', {
-            transports: ['websocket'],
-            query: { token },
-        })
-
         socket.on('group-information', (data) => {
-            console.log(data)
             setLoadedData(data)
+
             // setLoaded((value) => true)
         })
 
-        clearPopUpRef.current.addEventListener('click', () => {
-            setControls((values) => {
-                return {
-                    newChat: false,
-                    newGroup: false,
-                    addFriends: false,
-                    newUser: false,
-                    next: false,
+        socket.on('newMessage', (v) => {
+            const preview = document.getElementsByClassName('last-message')
+
+            const ElemArray = Array.from(preview)
+            ElemArray.forEach((b) => {
+                if (v.grpId == b.getAttribute('_id')) {
+                    b.innerHTML = v.msg || 'loading'
                 }
+            })
+            // For demonstration, let's update the name of the first object
+            setGroupChatDisplay((t) => {
+                return { ...t, messages: [...groupChatDisplay.messages, v] }
             })
 
-            setSettingsControls((values) => {
-                return {
-                    showSettings: false,
-                    general: false,
-                    account: false,
-                    chats: false,
-                    help: false,
+            setTimeout(() => {
+                if (getDom.current) {
+                    console.log('current')
+                    const { scrollHeight, clientHeight } = getDom.current
+                    // const scrollTo = scrollHeight + 50;
+                    getDom.current.scrollTop = scrollHeight - clientHeight
+                  
                 }
-            })
-
-            setShowInputFor((values) => {
-                return {
-                    name: false,
-                    about: false,
-                    phoneNo: false,
-                }
-            })
-            // if(inputData.disableInput === false){
-            //     alert("image will be disgarded")
-            // }
+            }, 100)
         })
-
-        // Get all nav-items
         return () => {}
-    }, [])
+    }, [groupChatDisplay])
+
     return (
         <div className="hero-section">
             <div className="side-menu" onClick={closeGroupPopUp}>
                 {controls.newChat && <NewChat CreateNewGroup={NewGroup} />}
-                {controls.newGroup && (
-                    <div className="create-new-group  p-2">
-                        <div className="fw-bold px-3">New Group</div>
-                        <div className="px-3">
-                            <input
-                                placeholder="Search"
-                                type="text"
-                                className="w-100  input mt-2"
-                            />
-                        </div>
-                        <AddFriends
-                            AddFriends={controls.addFriends}
-                            Next={ScrollToNext}
+                {controls.next && (
+                    <div className="create-new-group py-3 px-2">
+                        <CreateNewGroup
+                            newGroupData={newGroupData}
+                            setGroupData={setGroupData}
+                            SubmitNewGroup={SubmitNewGroup}
                         />
-                        {controls.next && <CreateNewGroup />}
                     </div>
                 )}
                 <Settings
-                    clearPopUpRef={clearPopUpRef}
                     settingsControls={settingsControls}
                     setSettingsControls={setSettingsControls}
                     showProfile={showProfile}
@@ -395,6 +441,7 @@ export default function ChatInterface() {
                     toggleSettings={toggleSettings}
                     ShowProfile={ShowProfile}
                     setShowProfile={setShowProfile}
+                    SendInformation={SendInformation}
                 />
             </div>
             <div className="chat-section" ref={clearPopUpRef}>
@@ -402,6 +449,8 @@ export default function ChatInterface() {
                     toggleNewChat={CreateNewChat}
                     loadedData={loadedData}
                     DisplayChats={DisplayChats}
+                    CloseUpClone={CloseUpClone}
+                    lastMessage={lastMessage}
                 />
                 {loaded ? (
                     <div className="space position-relative">
@@ -427,21 +476,30 @@ export default function ChatInterface() {
                         />
                         <div
                             className="content-area position-relative"
-                            onClick={closeGroupPopUp}
+                            onClick={() => {
+                                closeGroupPopUp()
+                                CloseUpClone()
+                            }}
                         >
                             <div>
                                 <AdminChatPage
                                     groupChatDisplay={groupChatDisplay}
+                                    getDom={getDom}
                                 />
                             </div>
                             {inputData.type == 'image' && (
-                                    <PreviewImage previewimg={inputData.text} ClearImgInput={ClearImgInput}/>
+                                <PreviewImage
+                                    previewimg={inputData.text}
+                                    ClearImgInput={ClearImgInput}
+                                />
                             )}
                         </div>
                         <Textarea
                             HandleInputs={HandleInputs}
                             inputData={inputData}
                             setInputData={setInputData}
+                            SendInformation={SendInformation}
+                            activeChat={activeChat}
                         />
                     </div>
                 ) : (

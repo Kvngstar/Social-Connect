@@ -4,7 +4,6 @@ export default function IsTokenExpired(token){
         if(token){
 
             const decodedToken = jwtDecode(token)
-            console.log("decodedToken",decodedToken)
             return decodedToken.exp < Date.now() / 1000
         }
         

@@ -1,0 +1,14 @@
+controls.newGroup && (
+                    <div className="create-new-group  p-2">
+                        <div className="fw-bold px-3">New Group</div>
+                        <div className="px-3">
+                            <input
+                                placeholder="Search"
+                                type="text"
+                                className="w-100  input mt-2"
+                            />
+                        </div>
+                        <AddFriends
+                            AddFriends={controls.addFriends}
+                            Next={ScrollToNext}
+                        />

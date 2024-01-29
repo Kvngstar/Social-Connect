@@ -6,6 +6,7 @@ export default function DownIcon({
     
     toggleSettings,
     ShowProfile,
+    SendInformation
 }) {
     return (
         <div className="down-icon">
@@ -44,7 +45,7 @@ export default function DownIcon({
                     height="22px"
                     width="auto"
                     alt="status"
-                    
+                  
                 />
             </div>
         </div>
