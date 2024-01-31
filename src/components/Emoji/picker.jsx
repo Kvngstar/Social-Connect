@@ -5,9 +5,11 @@ import "./picker.css"
 
 export default function EmojiPicker({onSelect,inputData, setInputData}) {
     function Emoji(event){
-        console.log("Emoji Function")
+        if(inputData.type === "image"){
+            return
+        }
         setInputData((v)=>{return {...v, text: (inputData.text + event.native),addIcon: false}})
-        console.log(event)
+        
     }
   return (
     <Picker data={data} onEmojiSelect={Emoji} />
