@@ -58,6 +58,7 @@ export default function ChatInterface() {
     })
     // Handle User input both text, image, audio and video call
     const [inputData, setInputData] = useState({
+        addIcon: false,
         disableInput: false,
         type: '',
         text: '',
@@ -384,8 +385,7 @@ export default function ChatInterface() {
         }
         socket.on('group-information', (data) => {
             setLoadedData(data)
-
-            // setLoaded((value) => true)
+            console.log(data, 'data')
         })
 
         socket.on('newMessage', (v) => {
@@ -394,23 +394,24 @@ export default function ChatInterface() {
             const ElemArray = Array.from(preview)
             ElemArray.forEach((b) => {
                 if (v.grpId == b.getAttribute('_id')) {
-                    b.innerHTML = v.msg || 'loading'
+                    v.type == 'image'
+                        ? (b.innerHTML = 'image')
+                        : (b.innerHTML = v.msg || 'loading ...')
                 }
             })
             // For demonstration, let's update the name of the first object
+            const easySpread = [...groupChatDisplay.messages, v]
             setGroupChatDisplay((t) => {
-                return { ...t, messages: [...groupChatDisplay.messages, v] }
+                return { ...t, messages: [...easySpread] }
             })
 
             setTimeout(() => {
                 if (getDom.current) {
-                    console.log('current')
                     const { scrollHeight, clientHeight } = getDom.current
-                    // const scrollTo = scrollHeight + 50;
-                    getDom.current.scrollTop = scrollHeight - clientHeight
-                  
+                    const Num = scrollHeight - clientHeight
+                    getDom.current.scrollTop = Num
                 }
-            }, 100)
+            }, 300)
         })
         return () => {}
     }, [groupChatDisplay])

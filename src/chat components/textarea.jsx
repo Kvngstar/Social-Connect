@@ -3,8 +3,14 @@ import smiley from '../assets/images/smiley.svg'
 import attachment from '../assets/images/attachment.svg'
 import send from '../assets/images/send.svg'
 import FileReading from '../components/filesUpload/image'
-export default function Textarea({ HandleInputs, inputData, setInputData,SendInformation,activeChat}) {
-
+import EmojiPicker from '../components/Emoji/picker'
+export default function Textarea({
+    HandleInputs,
+    inputData,
+    setInputData,
+    SendInformation,
+    activeChat,
+}) {
     function UploadFile() {
         let file = document.querySelector('.file').click()
     }
@@ -17,16 +23,33 @@ export default function Textarea({ HandleInputs, inputData, setInputData,SendInf
         })
         const Base64 = await FileReading(file.files[0])
         setInputData((values) => {
-            return { ...values, type: 'image', text: Base64,groupId: activeChat }
+            return {
+                ...values,
+                type: 'image',
+                text: Base64,
+                groupId: activeChat,
+            }
         })
     }
-    
+    function ShowIcons(){
+        setInputData((v)=>{return {...v,addIcon: true}})
+
+    }
 
     return (
-        <div className="text-area">
+        <div className="text-area ">
+            <div className="Emoji-container">
+                {inputData.addIcon && (
+                    <EmojiPicker
+                        setInputData={setInputData}
+                        inputData={inputData}
+                    />
+                )}
+            </div>
+
             <div className="icon-attachment">
-                <div>
-                    <img src={smiley} height="15px" width="auto" alt="status" />
+                <div onClick={ShowIcons}>
+                    <img src={smiley} height="15px" width="auto" />
                 </div>
                 <div>
                     <img
@@ -59,7 +82,13 @@ export default function Textarea({ HandleInputs, inputData, setInputData,SendInf
                 </div>
             )}
             <div className="p-1 px-3 bg-light">
-                <img src={send} height="15px" width="auto" alt="status" onClick={SendInformation}/>
+                <img
+                    src={send}
+                    height="15px"
+                    width="auto"
+                    alt="status"
+                    onClick={SendInformation}
+                />
             </div>
         </div>
     )
