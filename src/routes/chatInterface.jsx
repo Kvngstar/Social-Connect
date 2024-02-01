@@ -23,6 +23,7 @@ import _, { get } from 'lodash'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
+import VideoCall from '../calls/video.jsx';
 
 export default function ChatInterface() {
     const [loaded, setLoaded] = useState(false)
@@ -37,13 +38,9 @@ export default function ChatInterface() {
     const getDom = useRef()
     const token = GetToken('x-auth')
     const navigate = useNavigate()
+    const [socketState, setSocketState] = useState(null)
     let socket
-    var idd
-    // ESTABLISH THE SOCKET CONNECTION
-    socket = io('http://localhost:3001/chat', {
-        transports: ['websocket'],
-        query: { token },
-    })
+
     const [groupChatDisplay, setGroupChatDisplay] = useState({
         showGroupChat: false,
         groupId: '',
@@ -56,6 +53,13 @@ export default function ChatInterface() {
         messages: [],
         lastMessage: '',
     })
+
+    const [callInit, setCallInit] = useState({
+        isCall: false,
+
+        type: '',
+    })
+
     // Handle User input both text, image, audio and video call
     const [inputData, setInputData] = useState({
         addIcon: false,
@@ -332,47 +336,56 @@ export default function ChatInterface() {
         })
     }
     // APPEND RECIECEVED MESSAGE FROM SERVER
-    function AppendRecievedMessage() {}
+    // function AppendRecievedMessage() {}
 
-    function AppendedDom(v) {
-        const parentDom = getDom.current
-        console.log(parentDom, 'parentDom')
-        const wrapper = document.createElement('div')
-        wrapper.className = 'textContainer'
+    // function AppendedDom(v) {
+    //     const parentDom = getDom.current
+    //     console.log(parentDom, 'parentDom')
+    //     const wrapper = document.createElement('div')
+    //     wrapper.className = 'textContainer'
 
-        const mainNewDiv = document.createElement('div')
-        mainNewDiv.className = 'customer_textbox'
+    //     const mainNewDiv = document.createElement('div')
+    //     mainNewDiv.className = 'customer_textbox'
 
-        if (v.type == 'image') {
-            const newDiv = document.createElement('div')
-            const newImg = document.createElement('img')
-            newImg.style.height = '200px'
-            newImg.src = v.msg
-            newImg.alt = 'new image'
-            newDiv.append(newImg)
-            mainNewDiv.appendChild(newDiv)
-        } else if (v.type == 'text') {
-            const newSpan = document.createElement('span')
-            newSpan.className = 'd-flex mb-2'
+    //     if (v.type == 'image') {
+    //         const newDiv = document.createElement('div')
+    //         const newImg = document.createElement('img')
+    //         newImg.style.height = '200px'
+    //         newImg.src = v.msg
+    //         newImg.alt = 'new image'
+    //         newDiv.append(newImg)
+    //         mainNewDiv.appendChild(newDiv)
+    //     } else if (v.type == 'text') {
+    //         const newSpan = document.createElement('span')
+    //         newSpan.className = 'd-flex mb-2'
 
-            const newImg = document.createElement('img')
-            newImg.style.height = '20px'
-            newImg.style.height = '20px'
-            newImg.src = ''
-            newImg.className = 'mr-2 round-image'
+    //         const newImg = document.createElement('img')
+    //         newImg.style.height = '20px'
+    //         newImg.style.height = '20px'
+    //         newImg.src = ''
+    //         newImg.className = 'mr-2 round-image'
 
-            const newDiv = document.createElement('div')
-            newDiv.className = 'ralewaymeduim fontsize12'
-            newDiv.textContent = v.msg
-            newSpan.appendChild(newImg)
-            newSpan.appendChild(newDiv)
-            mainNewDiv.appendChild(newSpan)
-        }
-        wrapper.appendChild(mainNewDiv)
-        parentDom.appendChild(wrapper)
-    }
+    //         const newDiv = document.createElement('div')
+    //         newDiv.className = 'ralewaymeduim fontsize12'
+    //         newDiv.textContent = v.msg
+    //         newSpan.appendChild(newImg)
+    //         newSpan.appendChild(newDiv)
+    //         mainNewDiv.appendChild(newSpan)
+    //     }
+    //     wrapper.appendChild(mainNewDiv)
+    //     parentDom.appendChild(wrapper)
+    // }
 
     useEffect(() => {
+        // ESTABLISH THE SOCKET CONNECTION
+        socket = io('http://localhost:3001/chat', {
+            transports: ['websocket'],
+            query: { token },
+        })
+        console.log(socket)
+        setSocketState(() => {
+            return socket
+        })
         // CHECK IF USER IS  NOT LOGGED IN
         if (!token) {
             navigate('/login')
@@ -472,9 +485,12 @@ export default function ChatInterface() {
                             />
                         )}
                         <ChatBoxTop
+                        
                             groupChatDisplay={groupChatDisplay}
                             ShowGroupProfile={ShowGroupProfile}
+                            socketState={socketState}
                         />
+                        <VideoCall socketState={socketState}/>
                         <div
                             className="content-area position-relative"
                             onClick={() => {
