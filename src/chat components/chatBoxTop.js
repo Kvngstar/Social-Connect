@@ -1,28 +1,22 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import video from '../assets/images/video.svg'
 import call from '../assets/images/call.svg'
-import displayImage from '../assets/images/vi hub.jpg'
 import search from '../assets/images/search.svg'
-
+import SenderAudio from '../calls/functions/audio'
 export default function ChatBoxTop({
     ShowGroupProfile,
     groupChatDisplay,
+    setCallInit,
     socketState,
 }) {
-    const Navigate = useNavigate()
     function Init(event) {
         const type = event.target.getAttribute('for')
 
+        setCallInit((v) => {
+            return { ...v, isCall: true, type: type }
+        })
 
-
-        // Navigate('/video', {
-        //     state: {
-        //         param: groupChatDisplay,
-        //         type: type, 
-               
-        //     },
-        // })
+        SenderAudio(socketState, groupChatDisplay.groupId)
     }
     return (
         <div className="chat-box-top">
@@ -32,7 +26,7 @@ export default function ChatBoxTop({
                 </div>
                 <div>{groupChatDisplay.name} </div>
             </div>
-            <div className="action-icons ">
+            <div className="action-icons">
                 <div onClick={Init} for="video" className="p-1 bg-light">
                     {' '}
                     <img

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
+import _ from 'lodash'
 
 import GetToken from '../sessionManager/getToken'
 import IsTokenExpired from '../sessionManager/isTokExpired'
@@ -18,12 +19,11 @@ import ChatBoxTop from '../chat components/chatBoxTop.js'
 import Textarea from '../chat components/textarea.jsx'
 import PersonalProfilePopUp from '../chat components/personalChatProfilePopUp.jsx.jsx'
 import PreviewImage from '../components/preview.jsx'
-import root from '../index.js'
-import _, { get } from 'lodash'
+import VideoCall from '../calls/video.jsx'
+import Reciever from '../calls/functions/reciever.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/chatInterface.css'
-import VideoCall from '../calls/video.jsx';
 
 export default function ChatInterface() {
     const [loaded, setLoaded] = useState(false)
@@ -39,7 +39,10 @@ export default function ChatInterface() {
     const token = GetToken('x-auth')
     const navigate = useNavigate()
     const [socketState, setSocketState] = useState(null)
-    let socket
+    let socket = io('http://localhost:3001/chat', {
+        transports: ['websocket'],
+        query: { token },
+    })
 
     const [groupChatDisplay, setGroupChatDisplay] = useState({
         showGroupChat: false,
@@ -378,11 +381,7 @@ export default function ChatInterface() {
 
     useEffect(() => {
         // ESTABLISH THE SOCKET CONNECTION
-        socket = io('http://localhost:3001/chat', {
-            transports: ['websocket'],
-            query: { token },
-        })
-        console.log(socket)
+
         setSocketState(() => {
             return socket
         })
@@ -425,7 +424,9 @@ export default function ChatInterface() {
                     getDom.current.scrollTop = Num
                 }
             }, 300)
+            Reciever(socketState,groupChatDisplay.groupId)
         })
+
         return () => {}
     }, [groupChatDisplay])
 
@@ -485,12 +486,20 @@ export default function ChatInterface() {
                             />
                         )}
                         <ChatBoxTop
-                        
+                            setCallInit={setCallInit}
                             groupChatDisplay={groupChatDisplay}
                             ShowGroupProfile={ShowGroupProfile}
                             socketState={socketState}
                         />
-                        <VideoCall socketState={socketState}/>
+                        {callInit.isCall && (
+                            <div className="float-video">
+                                <VideoCall
+                                    socketState={socketState}
+                                    groupChatDisplay={groupChatDisplay}
+                                    setCallInit={setCallInit}
+                                />
+                            </div>
+                        )}
                         <div
                             className="content-area position-relative"
                             onClick={() => {

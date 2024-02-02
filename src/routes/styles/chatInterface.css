@@ -271,11 +271,15 @@ bottom: 0;
     /* background-color: rgb(245, 226, 49); */
 }
 /* Handle Active Nav Indicator */
-.nav-item{
-    
-}
+.nav-item{}
 .nav-item-profile{
-
+}
+.float-video{
+    position: absolute;
+    z-index: 3;
+    height: 400px;
+    width: 300px;
+    right: 0;
 }
 .active-item{
     border-left: 5px solid rgb(224, 170, 21);
@@ -315,5 +319,8 @@ bottom: 0;
     }
     .new-group{
         left: 50%;
+    }
+    .float-video{
+
     }
 }

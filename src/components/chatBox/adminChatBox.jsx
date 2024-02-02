@@ -5,7 +5,7 @@ import textdata from './jsontext'
 import man from '../../assets/images/profile.svg'
 import man2 from '../../assets/images/profile.svg'
 import getToken from '../../sessionManager/getToken'
-const AdminChatPage = ({ groupChatDisplay,getDom,}) => {
+const AdminChatPage = ({ groupChatDisplay, getDom }) => {
     const [showIcon, setShowIcon] = useState(false)
     const [text, setText] = useState('')
     const token = getToken('x-auth')
@@ -15,20 +15,16 @@ const AdminChatPage = ({ groupChatDisplay,getDom,}) => {
         setText(value)
     }
     return (
-        <div className="messageUs rounded box-position"  >
+        <div className="messageUs rounded box-position">
             <div className="chatBox" ref={getDom}>
-                <div className="scrollable" >
+                <div className="scrollable">
                     {groupChatDisplay.showGroupChat &&
                         groupChatDisplay.messages.map((v, index) => {
                             return (
-                                <div
-                                    className="textContainer"
-                                    key={index}
-                                    
-                                >
+                                <div className="textContainer" key={index}>
                                     {jwtDecode(token)._id === v._userId ? (
                                         <div className=" customer_textbox">
-                                            {v.type == 'image' ? (
+                                            {v.type === 'image' ? (
                                                 <div>
                                                     <img
                                                         src={v.text}
@@ -63,25 +59,35 @@ const AdminChatPage = ({ groupChatDisplay,getDom,}) => {
                                         </div>
                                     ) : (
                                         <div className=" me-4 admin_textbox ">
-                                            <div className="d-flex mb-2">
-                                                <img
-                                                    src={man}
-                                                    className="mr-2 round-image"
-                                                    style={{
-                                                        height: '20px',
-                                                        width: '20px',
-                                                    }}
-                                                    alt=""
-                                                />
-                                                <div className="poppinsemibold fontsize12">
-                                                    {' '}
-                                                    {v.text}
+                                            {v.type === 'image' ? (
+                                                <div>
+                                                    <img
+                                                        src={v.text}
+                                                        alt=""
+                                                        height="200px"
+                                                    />
                                                 </div>
-                                            </div>
+                                            ) : (
+                                                <div className="d-flex mb-2">
+                                                    <img
+                                                        src={man}
+                                                        className="mr-2 round-image"
+                                                        style={{
+                                                            height: '20px',
+                                                            width: '20px',
+                                                        }}
+                                                        alt=""
+                                                    />
+                                                    <div className="poppinsemibold fontsize12">
+                                                        {' '}
+                                                        {v.text}
+                                                    </div>
+                                                </div>
+                                            )}
                                             <span className="chat_date">
                                                 {' '}
                                                 <span className="admin_label mr-1">
-                                                    me
+                                                    {v.username}
                                                 </span>
                                                 {v.date}
                                             </span>

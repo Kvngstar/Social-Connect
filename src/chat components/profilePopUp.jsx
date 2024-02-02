@@ -277,9 +277,9 @@ export default function ProfilePopUp({
                                                         </div>
                                                         <div>{v}</div>
                                                     </div>
-                                                    <div className="me-1">
+                                                   { groupChatDisplay.adminUsername == v ? <div className="me-1">
                                                         admin
-                                                    </div>
+                                                    </div> : ""}
                                                 </div>
                                             )
                                         }
