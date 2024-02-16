@@ -9,11 +9,11 @@ function App() {
     
     return (
         <Routes>
-            <Route path="login" element={<Login />} />
+            <Route index element={<Login />}/>
             <Route path="register" element={<Register />} />
             <Route path="chat" element={<ChatInterface />} />
             <Route path="video" element={<VideoCall/>} />
-            <Route index element={<ChatInterface />} />
+            <Route path="*" element={<Login />} />
         </Routes>
     )
 }

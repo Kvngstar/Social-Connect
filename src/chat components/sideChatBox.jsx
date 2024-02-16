@@ -13,8 +13,11 @@ export default function SideChatBox({
 }) {
     const token = GetToken('x-auth')
     let decodedData = jwtDecode(token)
-    let num = -1
+    
+    let num = -1  ;
+    
     const [groupData, setGroupData] = useState(jwtDecode(token).groups)
+
     return (
         <div className="chats bg-dark text-light">
             <div className="center-bar">

@@ -2,8 +2,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth;
-    transition: all 0.21s ease-in;
+    /* scroll-behavior: smooth;
+    transition: all 0.21s ease-in; */
 }
 .side-menu {
     width: 50px;

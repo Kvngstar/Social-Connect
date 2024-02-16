@@ -1,3 +1,9 @@
 export default function GetToken(tokenName){
-    return localStorage.getItem(tokenName);
+    
+    const token = localStorage.getItem(tokenName);
+    if(token){
+
+        return token 
+    }
+    return null
 }

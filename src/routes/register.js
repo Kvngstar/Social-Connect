@@ -14,7 +14,7 @@ export default function Register() {
 
     if (token) {
       if (IsTokenExpired(token) === false) {
-        navigate("/chat");
+        navigate("/api/v1//chat");
       }
     }
   }, []);

@@ -1,10 +1,10 @@
-import { jwtDecode } from 'jwt-decode'
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import io from 'socket.io-client'
-import GetToken from '../sessionManager/getToken'
-import IsTokenExpired from '../sessionManager/isTokExpired'
-import './styles/chat.css'
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
+import GetToken from '../sessionManager/getToken';
+import IsTokenExpired from '../sessionManager/isTokExpired';
+import './styles/chat.css';
 export default function Chat() {
     const navigate = useNavigate()
     let socket
@@ -23,11 +23,12 @@ export default function Chat() {
 
     const chat = useRef()
 
-    // socket = io('http://localhost:3001/chat', {
-    //     transports: ['websocket'],
-    //     query: { token },
-    // })
-
+    socket = io('http://127.0.0.1:3000/chat', {
+        transports: ['websocket'],
+        query: { token },
+    })
+    console.log('running ...')
+    
     useEffect(() => {
         if (!token) {
             navigate('/')
@@ -37,11 +38,12 @@ export default function Chat() {
                 navigate('/')
             }
         }
-
+        
         // socket connection for full duplex communication
 
         // get user group from server and update UI
         socket.on('group-information', (data) => {
+            console.log(data)
             setTheGroup((value) => {
                 return data
             })
