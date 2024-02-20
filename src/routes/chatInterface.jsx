@@ -39,6 +39,7 @@ export default function ChatInterface() {
   const token = GetToken("x-auth");
   const navigate = useNavigate();
   const [socketState, setSocketState] = useState(null);
+  var socket;
 
   const [groupChatDisplay, setGroupChatDisplay] = useState({
     showGroupChat: false,
@@ -229,7 +230,7 @@ export default function ChatInterface() {
     link,
     messages,
     adminUsername,
-    chatId
+    chatId 
   ) {
     setGroupChatDisplay((values) => {
       return {
@@ -362,76 +363,71 @@ export default function ChatInterface() {
   }, []);
 
   useEffect(() => {
-    let socket = io("http://localhost:3000/chat", {
+    socket = io("http://localhost:3000/chat", {
       transports: ["websocket"],
       query: { token },
     });
-
+    console.log("socket.io", socket);
     setSocketState(() => {
       return socket;
     });
 
+    console.log("newMessage", socketState);
+    socket.on("newMessage", (v) => {
+      console.log("Moving Train Ways");
+      const preview = document.getElementsByClassName("last-message");
+
+      const ElemArray = Array.from(preview);
+      ElemArray.forEach((b) => {
+        if (v.grpId == b.getAttribute("_id")) {
+          v.type == "image"
+            ? (b.innerHTML = "image")
+            : (b.innerHTML = v.msg || "loading ...");
+        }
+      });
+
+      //              const grop =  loadedData.filter((v)=>{
+      //    return v._id
+      //    == v.groupId  })
+      //   setLoadedData((values)=>{
+      //     return [...values,]
+      //   })
+
+      // For demonstration, let's update the name of the first object
+      const easySpread = [...groupChatDisplay.messages, v];
+      console.log("groupChatDisplay.messages", groupChatDisplay.messages);
+      console.log("v: ", v);
+
+      setGroupChatDisplay((t) => {
+        return { ...t, messages: [...easySpread] };
+      });
+      //   setTimeout(() => {
+      //       getDom.current.children[0].lastElementChild.scrollIntoView({behavior:'smooth'})
+
+      //     }, 200);
+      //   Reciever(socketState, groupChatDisplay.groupId);
+    }); 
+
     return () => {
-        socket.disconnect();
-      };
+      socket.disconnect();
+    }; 
   }, []);
 
   useEffect(() => {
-    console.log("groupInfo", socketState)
-    console.log("groupInfo", socketState)
     if (!socketState) {
       return;
     }
+    console.log("groupInfo", socketState);
     socketState.on("group-information", (data) => {
       setLoadedData(() => data);
       console.log(data, "data");
     });
-
     return () => {
       socketState.off("group-information");
-    }; 
+    };
   }, [socketState]);
- 
 
-
-  useEffect(() => {
-    if (socketState) {
-      socketState.on("newMessage", (v) => {
-        console.log("Moving Train Ways");
-        const preview = document.getElementsByClassName("last-message");
-
-        const ElemArray = Array.from(preview);
-        ElemArray.forEach((b) => {
-          if (v.grpId == b.getAttribute("_id")) {
-            v.type == "image"
-              ? (b.innerHTML = "image")
-              : (b.innerHTML = v.msg || "loading ...");
-          }
-        });
-
-        //              const grop =  loadedData.filter((v)=>{
-        //    return v._id
-        //    == v.groupId  })
-        //   setLoadedData((values)=>{
-        //     return [...values,]
-        //   })
-
-        // For demonstration, let's update the name of the first object
-        const easySpread = [...groupChatDisplay.messages, v];
-        console.log("groupChatDisplay.messages", groupChatDisplay.messages);
-        console.log("v: ", v);
-
-        setGroupChatDisplay((t) => {
-          return { ...t, messages: [...easySpread] };
-        });
-        //   setTimeout(() => {
-        //       getDom.current.children[0].lastElementChild.scrollIntoView({behavior:'smooth'})
-
-        //     }, 200);
-        //   Reciever(socketState, groupChatDisplay.groupId);
-      });
-    }
-  }, [socketState]);
+  useEffect(() => {}, [socketState]);
 
   return (
     <>
