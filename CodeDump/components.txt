@@ -1,2 +1,43 @@
 #THis is the unexpected code Duum
 
+
+ // APPEND RECIECEVED MESSAGE FROM SERVER
+  // function AppendRecievedMessage() {}
+
+  // function AppendedDom(v) {
+  //     const parentDom = getDom.current
+  //     console.log(parentDom, 'parentDom')
+  //     const wrapper = document.createElement('div')
+  //     wrapper.className = 'textContainer'
+
+  //     const mainNewDiv = document.createElement('div')
+  //     mainNewDiv.className = 'customer_textbox'
+
+  //     if (v.type == 'image') {
+  //         const newDiv = document.createElement('div')
+  //         const newImg = document.createElement('img')
+  //         newImg.style.height = '200px'
+  //         newImg.src = v.msg
+  //         newImg.alt = 'new image'
+  //         newDiv.append(newImg)
+  //         mainNewDiv.appendChild(newDiv)
+  //     } else if (v.type == 'text') {
+  //         const newSpan = document.createElement('span')
+  //         newSpan.className = 'd-flex mb-2'
+ 
+  //         const newImg = document.createElement('img')
+  //         newImg.style.height = '20px'
+  //         newImg.style.height = '20px'
+  //         newImg.src = ''
+  //         newImg.className = 'mr-2 round-image'
+
+  //         const newDiv = document.createElement('div')
+  //         newDiv.className = 'ralewaymeduim fontsize12'
+  //         newDiv.textContent = v.msg
+  //         newSpan.appendChild(newImg)
+  //         newSpan.appendChild(newDiv)
+  //         mainNewDiv.appendChild(newSpan)
+  //     }
+  //     wrapper.appendChild(mainNewDiv)
+  //     parentDom.appendChild(wrapper)
+  // }

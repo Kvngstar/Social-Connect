@@ -1,26 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 import _ from "lodash";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
+import VideoCall from "../calls/video.jsx";
+import ChatBoxTop from "../chat components/chatBoxTop.js";
+import CreateNewGroup from "../chat components/createNewGroup.jsx";
+import DownIcon from "../chat components/downIcon.jsx";
+import NewChat from "../chat components/newgroup.jsx";
+import PersonalProfilePopUp from "../chat components/personalChatProfilePopUp.jsx.jsx";
+import ProfilePopUp from "../chat components/profilePopUp.jsx";
+import Settings from "../chat components/settings.jsx";
+import SideChatBox from "../chat components/sideChatBox.jsx";
+import SideIcons from "../chat components/sideIcons.jsx";
+import Textarea from "../chat components/textarea.jsx";
+import AdminChatPage from "../components/chatBox/adminChatBox.jsx";
+import PreviewImage from "../components/preview.jsx";
 import GetToken from "../sessionManager/getToken";
 import IsTokenExpired from "../sessionManager/isTokExpired";
-import AdminChatPage from "../components/chatBox/adminChatBox.jsx";
-import NewChat from "../chat components/newgroup.jsx";
-import CreateNewGroup from "../chat components/createNewGroup.jsx";
-import AddFriends from "../chat components/addFriens.jsx";
-import Settings from "../chat components/settings.jsx";
-import SideIcons from "../chat components/sideIcons.jsx";
-import DownIcon from "../chat components/downIcon.jsx";
-import SideChatBox from "../chat components/sideChatBox.jsx";
-import ProfilePopUp from "../chat components/profilePopUp.jsx";
-import ChatBoxTop from "../chat components/chatBoxTop.js";
-import Textarea from "../chat components/textarea.jsx";
-import PersonalProfilePopUp from "../chat components/personalChatProfilePopUp.jsx.jsx";
-import PreviewImage from "../components/preview.jsx";
-import VideoCall from "../calls/video.jsx";
-import Reciever from "../calls/functions/reciever.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/chatInterface.css";
@@ -371,43 +369,6 @@ export default function ChatInterface() {
     setSocketState(() => {
       return socket;
     });
-
-    console.log("newMessage", socketState);
-    socket.on("newMessage", (v) => {
-      console.log("Moving Train Ways");
-      const preview = document.getElementsByClassName("last-message");
-
-      const ElemArray = Array.from(preview);
-      ElemArray.forEach((b) => {
-        if (v.grpId == b.getAttribute("_id")) {
-          v.type == "image"
-            ? (b.innerHTML = "image")
-            : (b.innerHTML = v.msg || "loading ...");
-        }
-      });
-
-      //              const grop =  loadedData.filter((v)=>{
-      //    return v._id
-      //    == v.groupId  })
-      //   setLoadedData((values)=>{
-      //     return [...values,]
-      //   })
-
-      // For demonstration, let's update the name of the first object
-      const easySpread = [...groupChatDisplay.messages, v];
-      console.log("groupChatDisplay.messages", groupChatDisplay.messages);
-      console.log("v: ", v);
-
-      setGroupChatDisplay((t) => {
-        return { ...t, messages: [...easySpread] };
-      });
-      //   setTimeout(() => {
-      //       getDom.current.children[0].lastElementChild.scrollIntoView({behavior:'smooth'})
-
-      //     }, 200);
-      //   Reciever(socketState, groupChatDisplay.groupId);
-    }); 
-
     return () => {
       socket.disconnect();
     }; 
@@ -427,7 +388,42 @@ export default function ChatInterface() {
     };
   }, [socketState]);
 
-  useEffect(() => {}, [socketState]);
+  useEffect(() => {
+    if(!socketState) return;
+    socketState.on("newMessage", (v) => {
+ console.log(v)
+        const preview = document.getElementsByClassName("last-message");
+  
+        const ElemArray = Array.from(preview);
+        ElemArray.forEach((b) => {
+          if (v.grpId == b.getAttribute("_id")) {
+            v.type == "image"
+              ? (b.innerHTML = "image")
+              : (b.innerHTML = v.msg );
+          }
+        });
+   
+        //              const grop =  loadedData.filter((v)=>{
+        //    return v._id
+        //    == v.groupId  })
+        //   setLoadedData((values)=>{
+        //     return [...values,]
+        //   })
+  
+        // For demonstration, let's update the name of the first object
+        const easySpread = [...groupChatDisplay.messages, v];
+        console.log("groupChatDisplay.messages", groupChatDisplay.messages);
+        setGroupChatDisplay((t) => {
+          return { ...t, messages: [...easySpread] };
+        });
+        //   setTimeout(() => {
+        //       getDom.current.children[0].lastElementChild.scrollIntoView({behavior:'smooth'})
+  
+        //     }, 200);
+        //   Reciever(socketState, groupChatDisplay.groupId);
+      }); 
+  
+  }, [socketState, groupChatDisplay]);
 
   return (
     <>
