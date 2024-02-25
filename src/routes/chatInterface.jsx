@@ -30,10 +30,12 @@ export default function ChatInterface() {
   const [isPersonalChat, setIsPersonalChat] = useState(false);
   const [loadedData, setLoadedData] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
+  const [newMessag, setNewMessag] = useState(false);
   const [lastMessage, setLastMessage] = useState("");
   const [reload, setReloaded] = useState(0);
   const scrollTo = useRef();
   const getDom = useRef();
+  const relate = useRef(0);
   const token = GetToken("x-auth");
   const navigate = useNavigate();
   const [socketState, setSocketState] = useState(null);
@@ -228,8 +230,13 @@ export default function ChatInterface() {
     link,
     messages,
     adminUsername,
-    chatId 
+    chatId
   ) {
+    const extractGroup = loadedData.filter((p) => {
+      return p._id == chatId;
+    });
+
+    console.log(extractGroup);
     setGroupChatDisplay((values) => {
       return {
         ...values,
@@ -241,7 +248,7 @@ export default function ChatInterface() {
         date: date,
         members: members,
         link: link,
-        messages: messages,
+        messages: extractGroup[0].groupMessages,
         adminUsername: adminUsername,
       };
     });
@@ -371,7 +378,7 @@ export default function ChatInterface() {
     });
     return () => {
       socket.disconnect();
-    }; 
+    };
   }, []);
 
   useEffect(() => {
@@ -389,41 +396,49 @@ export default function ChatInterface() {
   }, [socketState]);
 
   useEffect(() => {
-    if(!socketState) return;
+    if (!socketState) return;
     socketState.on("newMessage", (v) => {
- console.log(v)
-        const preview = document.getElementsByClassName("last-message");
-  
-        const ElemArray = Array.from(preview);
-        ElemArray.forEach((b) => {
-          if (v.grpId == b.getAttribute("_id")) {
-            v.type == "image"
-              ? (b.innerHTML = "image")
-              : (b.innerHTML = v.msg );
-          }
-        });
-   
-        //              const grop =  loadedData.filter((v)=>{
-        //    return v._id
-        //    == v.groupId  })
-        //   setLoadedData((values)=>{
-        //     return [...values,]
-        //   })
-  
-        // For demonstration, let's update the name of the first object
+      const preview = document.getElementsByClassName("last-message");
+      console.log("v", v);
+      const ElemArray = Array.from(preview);
+      ElemArray.forEach((b) => {
+        if (v.grpId == b.getAttribute("_id")) {
+          v.type == "image"
+            ? (b.innerHTML = "image")
+            : (b.innerHTML = v.text || "loading ..");
+        }
+      });
+
+      // For demonstration, let's update the name of the first object
+      if (groupChatDisplay.groupId == v.grpId) {
         const easySpread = [...groupChatDisplay.messages, v];
-        console.log("groupChatDisplay.messages", groupChatDisplay.messages);
         setGroupChatDisplay((t) => {
           return { ...t, messages: [...easySpread] };
         });
-        //   setTimeout(() => {
-        //       getDom.current.children[0].lastElementChild.scrollIntoView({behavior:'smooth'})
-  
-        //     }, 200);
-        //   Reciever(socketState, groupChatDisplay.groupId);
-      }); 
-  
-  }, [socketState, groupChatDisplay]);
+        setTimeout(() => {
+          getDom.current.children[0].lastElementChild.scrollIntoView({
+            behavior: "smooth",
+          });
+        }, 200);
+
+        // const extractGroup = loadedData.filter((p) => {
+        //   return p._id == v.grpId;
+        // });
+      }
+
+      setLoadedData((values) => {
+        return values.map((obj) => {
+          if (obj._id == v.grpId) {
+            return { ...obj, groupMessages: [...obj.groupMessages, v] };
+          } else {
+            return obj;
+          }
+        });
+      });
+
+      //   Reciever(socketState, groupChatDisplay.groupId);
+    });
+  }, [socketState]);
 
   return (
     <>
