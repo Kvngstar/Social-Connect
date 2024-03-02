@@ -236,7 +236,6 @@ export default function ChatInterface() {
       return p._id == chatId;
     });
 
-    console.log(extractGroup);
     setGroupChatDisplay((values) => {
       return {
         ...values,
@@ -252,6 +251,7 @@ export default function ChatInterface() {
         adminUsername: adminUsername,
       };
     });
+    
     setGroupControl((values) => {
       return {
         showGroupProfile: false,
@@ -399,7 +399,7 @@ export default function ChatInterface() {
     if (!socketState) return;
     socketState.on("newMessage", (v) => {
       const preview = document.getElementsByClassName("last-message");
-      console.log("v", v);
+
       const ElemArray = Array.from(preview);
       ElemArray.forEach((b) => {
         if (v.grpId == b.getAttribute("_id")) {
@@ -415,11 +415,11 @@ export default function ChatInterface() {
         setGroupChatDisplay((t) => {
           return { ...t, messages: [...easySpread] };
         });
-        setTimeout(() => {
-          getDom.current.children[0].lastElementChild.scrollIntoView({
-            behavior: "smooth",
-          });
-        }, 200);
+        // setTimeout(() => {
+        //   getDom.current.children[0].lastElementChild.scrollIntoView({
+        //     behavior: "smooth",
+        //   });
+        // }, 200);
 
         // const extractGroup = loadedData.filter((p) => {
         //   return p._id == v.grpId;
