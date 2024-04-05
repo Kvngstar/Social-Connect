@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import "./styles/register.css";
-import axios from "../restApi/axios";
 import _ from "lodash";
-import GetToken from "../sessionManager/getToken";
-import IsTokenExpired from "../sessionManager/isTokExpired";
-import SetToken from "../sessionManager/storeToken";
-import RemoveToken from "../sessionManager/removeToken";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../restApi/axios";
+import GetToken, {
+  IsTokenExpired,
+  SetToken,
+  RemoveToken,
+} from "../sessionManager/authToken";
+import "./styles/register.css";
 export default function Register() {
   const navigate = useNavigate();
   useEffect(() => {

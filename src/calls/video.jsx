@@ -34,12 +34,12 @@ export default function VideoCall({
                 </div>
                 <div className="video-center bg-dark rounded d-flex flex-column justify-content-center align-items-center">
                     <img
-                        src={groupChatDisplay.profileImage}
+                        src={groupChatDisplay.groupIcon}
                         className="round-image"
                         style={{ width: '100px', height: '100px' }}
                         alt=""
                     />
-                    <div>{groupChatDisplay.name}</div>
+                    <div>{groupChatDisplay.groupName}</div>
                     <div>
                         {declined ? (
                             <small className="text-danger">Declined</small>

@@ -36,9 +36,9 @@ export default function Login() {
   async function Submit(event) {
     event.preventDefault();
     try {
-        console.log("formData: ", formData)
-        const response = await axios.post("/login", formData);
-        console.log("response",response)
+      console.log("formData: ", formData);
+      const response = await axios.post("/login", formData);
+      console.log("response", response);
       if (response.status >= 200 && response.status < 400) {
         const token = GetToken("x-auth");
         if (token) {
@@ -46,9 +46,9 @@ export default function Login() {
         }
         SetToken(response.headers["x-auth"], "x-auth");
         navigate("/chat");
-        return
+        return;
       } else if (response.status == 400) {
-        console.log(response   );
+        console.log(response);
       }
     } catch (error) {
       console.log(error);

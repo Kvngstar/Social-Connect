@@ -1,7 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 import _ from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
 import VideoCall from "../calls/video.jsx";
@@ -17,8 +16,7 @@ import SideIcons from "../chat components/sideIcons.jsx";
 import Textarea from "../chat components/textarea.jsx";
 import AdminChatPage from "../components/chatBox/adminChatBox.jsx";
 import PreviewImage from "../components/preview.jsx";
-import GetToken from "../sessionManager/getToken";
-import IsTokenExpired from "../sessionManager/isTokExpired";
+import GetToken, { DecodedToken } from "../sessionManager/authToken.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/chatInterface.css";
@@ -26,37 +24,45 @@ import "./styles/chatInterface.css";
 export default function ChatInterface() {
   const [loaded, setLoaded] = useState(false);
   const [activeChat, setActiveChat] = useState("");
+  const activeChatRef = useRef(activeChat);
   const clearPopUpRef = useRef([]);
   const [isPersonalChat, setIsPersonalChat] = useState(false);
   const [loadedData, setLoadedData] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
-  const [newMessag, setNewMessag] = useState(false);
   const [lastMessage, setLastMessage] = useState("");
-  const [reload, setReloaded] = useState(0);
+  const [userGroupData, setUserGroupData] = useState({});
   const scrollTo = useRef();
   const getDom = useRef();
-  const relate = useRef(0);
-  const token = GetToken("x-auth");
-  const navigate = useNavigate();
+  const loadedDataRef = useRef(loadedData);
+  const [tokenValue, setTokenValue] = useState(DecodedToken());
+  const [chatIndex, setChatIndex] = useState();
+  const token = GetToken();
   const [socketState, setSocketState] = useState(null);
   var socket;
 
   const [groupChatDisplay, setGroupChatDisplay] = useState({
     showGroupChat: false,
+    _id: "",
     groupId: "",
-    profileImage: "",
-    name: "",
-    description: "",
-    date: "",
+    groupIcon: "",
+    groupName: "",
+    groupDescription: "",
+    creationDate: "",
     members: [],
     link: "",
-    messages: [],
+    groupMessages: [],
     lastMessage: "",
+    adminUsername: "",
+  });
+  const [dataloaded, setDataLoaded] = useState(false);
+  const [group_control, setGroup_Control] = useState({
+    showGroupChat: false,
+    _id: "",
+    groupId: "",
   });
 
   const [callInit, setCallInit] = useState({
     isCall: false,
-
     type: "",
   });
 
@@ -67,7 +73,6 @@ export default function ChatInterface() {
     type: "",
     text: "",
     username: function () {
-      console.log("token", token);
       if (token) {
         return jwtDecode(token).username;
       }
@@ -130,7 +135,25 @@ export default function ChatInterface() {
     groupName: "",
     groupDescription: "",
   });
-
+  const[resetProfileData, setResetProfileData] = useState({
+    type: "",
+    new: "",
+  });
+  function ResetUserData(event) {
+    const { name, value } = event.target;
+    let data;
+    if (name === "username") {
+      data = "username";
+    } else if ((name = "about")) {
+      data = "about"; 
+    } else if ((name = "phoneNum")) {
+      data = "phoneNum";
+    }
+    console.log(name, value);
+    setResetProfileData((values) => {
+      return { type: data, data: value };
+    });
+  }
   // FUNCTIONS FOR HANDLING CREATE NEW CHAT POP-UPS
   function CreateNewChat(event) {
     setControls((values) => {
@@ -305,7 +328,7 @@ export default function ChatInterface() {
   // Function send Message to Group
   function SendInformation() {
     socketState.emit(
-      `grouper-message-${groupChatDisplay.groupId}`,
+      `grouper-message-${loadedData[chatIndex]._id}`,
       _.omit(inputData, ["disableInput"])
     );
 
@@ -442,117 +465,121 @@ export default function ChatInterface() {
 
   return (
     <>
-      {token && (
-        <div className="hero-section">
-          <div className="side-menu" onClick={closeGroupPopUp}>
-            {controls.newChat && <NewChat CreateNewGroup={NewGroup} />}
-            {controls.next && (
-              <div className="create-new-group py-3 px-2">
-                <CreateNewGroup
-                  newGroupData={newGroupData}
-                  setGroupData={setGroupData}
-                  SubmitNewGroup={SubmitNewGroup}
-                />
-              </div>
-            )}
-            <Settings
-              settingsControls={settingsControls}
-              setSettingsControls={setSettingsControls}
-              showProfile={showProfile}
-              setShowProfile={setShowProfile}
-              showInputFor={showInputFor}
-              setShowInputFor={setShowInputFor}
-            />
-            <SideIcons ToggleActiveNav={ToggleActiveNav} />
-            <DownIcon
-              toggleSettings={toggleSettings}
-              ShowProfile={ShowProfile}
-              setShowProfile={setShowProfile}
-              SendInformation={SendInformation}
-            />
-          </div>
-          <div className="chat-section" ref={clearPopUpRef}>
-            <SideChatBox
-              toggleNewChat={CreateNewChat}
-              loadedData={loadedData}
-              DisplayChats={DisplayChats}
-              CloseUpClone={CloseUpClone}
-              lastMessage={lastMessage}
-            />
-            {loaded ? (
-              <div className="space position-relative">
-                {isPersonalChat ? (
-                  <PersonalProfilePopUp
-                    ToggleProfileNav={ToggleProfileNav}
-                    personalChatControl={personalChatControl}
-                    setPersonalChatControl={setPersonalChatControl}
-                  />
-                ) : (
-                  <ProfilePopUp
-                    groupControl={groupControl}
-                    setGroupControl={setGroupControl}
-                    showGroupInputFor={showGroupInputFor}
-                    setGroupShowInputFor={setGroupShowInputFor}
-                    ToggleProfileNav={ToggleProfileNav}
-                    groupChatDisplay={groupChatDisplay}
-                  />
-                )}
-                <ChatBoxTop
-                  setCallInit={setCallInit}
-                  groupChatDisplay={groupChatDisplay}
-                  ShowGroupProfile={ShowGroupProfile}
-                  socketState={socketState}
-                />
-                {callInit.isCall && (
-                  <div className="float-video">
-                    <VideoCall
-                      socketState={socketState}
-                      groupChatDisplay={groupChatDisplay}
-                      setCallInit={setCallInit}
-                    />
-                  </div>
-                )}
-                <div
-                  className="content-area position-relative"
-                  onClick={() => {
-                    closeGroupPopUp();
-                    CloseUpClone();
-                  }}
-                >
-                  <div>
-                    <AdminChatPage
-                      groupChatDisplay={groupChatDisplay}
-                      getDom={getDom}
-                    />
-                  </div>
-                  {inputData.type == "image" && (
-                    <PreviewImage
-                      previewimg={inputData.text}
-                      ClearImgInput={ClearImgInput}
-                    />
-                  )}
-                </div>
-                <Textarea
-                  HandleInputs={HandleInputs}
-                  inputData={inputData}
-                  setInputData={setInputData}
-                  SendInformation={SendInformation}
-                  activeChat={activeChat}
-                />
-              </div>
-            ) : (
-              <div className="d-flex align-items-center flex-column justify-content-center w-100 bg-dark text-light">
-                <div className="fw-bolder">Social Connect For Web</div>
-                <div className="bg-success text-center">
-                  A Messaging Platform for the web, text anytime and reply
-                  anonymously
-                </div>
-                <br />
-              </div>
-            )}
-          </div>
+      <div className="hero-section">
+        <div className="side-menu" onClick={closeGroupPopUp}>
+          {controls.newChat && <NewChat CreateNewGroup={NewGroup} />}
+          {controls.next && (
+            <div className="create-new-group py-3 px-2">
+              <CreateNewGroup
+                newGroupData={newGroupData}
+                setGroupData={setGroupData}
+                SubmitNewGroup={SubmitNewGroup}
+              />
+            </div>
+          )}
+          <Settings
+            settingsControls={settingsControls}
+            setSettingsControls={setSettingsControls}
+            showProfile={showProfile}
+            setShowProfile={setShowProfile} 
+            showInputFor={showInputFor}
+            setShowInputFor={setShowInputFor}
+            userGroupData={userGroupData}
+            ResetUserData ={ResetUserData}
+            resetProfileData={resetProfileData}
+          />
+          <SideIcons ToggleActiveNav={ToggleActiveNav} />
+          <DownIcon
+            toggleSettings={toggleSettings}
+            ShowProfile={ShowProfile}
+            setShowProfile={setShowProfile}
+            SendInformation={SendInformation}
+          />
         </div>
-      )}
+        <div className="chat-section" ref={clearPopUpRef}>
+          <SideChatBox
+            toggleNewChat={CreateNewChat}
+            loadedData={loadedData}
+            userGroupData={userGroupData}
+            DisplayChats={DisplayChats}
+            CloseUpClone={CloseUpClone}
+            lastMessage={lastMessage}
+          />
+          {loaded ? (
+            <div className="space position-relative">
+              {isPersonalChat ? (
+                <PersonalProfilePopUp
+                  ToggleProfileNav={ToggleProfileNav}
+                  personalChatControl={personalChatControl}
+                  setPersonalChatControl={setPersonalChatControl}
+                />
+              ) : (
+                <ProfilePopUp
+                  groupControl={groupControl}
+                  setGroupControl={setGroupControl}
+                  showGroupInputFor={showGroupInputFor}
+                  setGroupShowInputFor={setGroupShowInputFor}
+                  ToggleProfileNav={ToggleProfileNav}
+                  groupChatDisplay={groupChatDisplay}
+                />
+              )}
+              <ChatBoxTop
+                setCallInit={setCallInit}
+                groupChatDisplay={groupChatDisplay}
+                ShowGroupProfile={ShowGroupProfile}
+                socketState={socketState}
+              />
+              {callInit.isCall && (
+                <div className="float-video">
+                  <VideoCall
+                    socketState={socketState}
+                    groupChatDisplay={groupChatDisplay}
+                    setCallInit={setCallInit}
+                  />
+                </div>
+              )}
+              <div
+                className="content-area position-relative"
+                onClick={() => {
+                  closeGroupPopUp();
+                  CloseUpClone();
+                }}
+              >
+                <div>
+                  <AdminChatPage
+                    group_control={group_control}
+                    groupChatDisplay={loadedData[chatIndex || 0]}
+                    getDom={getDom}
+                    groupcontrol={group_control}
+                  />
+                </div>
+                {inputData.type == "image" && (
+                  <PreviewImage
+                    previewimg={inputData.text}
+                    ClearImgInput={ClearImgInput}
+                  />
+                )}
+              </div>
+              <Textarea
+                HandleInputs={HandleInputs}
+                inputData={inputData}
+                setInputData={setInputData}
+                SendInformation={SendInformation}
+                activeChat={activeChat}
+              />
+            </div>
+          ) : (
+            <div className="d-flex align-items-center flex-column justify-content-center w-100 bg-dark text-light">
+              <div className="fw-bolder">Social Connect For Web</div>
+              <div className="bg-success text-center">
+                A Messaging Platform for the web, text anytime and reply
+                anonymously
+              </div>
+              <br />
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

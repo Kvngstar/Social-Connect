@@ -22,9 +22,9 @@ export default function ChatBoxTop({
         <div className="chat-box-top">
             <div className="chat-box-top-img" onClick={ShowGroupProfile}>
                 <div className="">
-                    <img src={groupChatDisplay.profileImage} alt="image" />
+                    <img src={groupChatDisplay.groupIcon} alt="image" />
                 </div>
-                <div>{groupChatDisplay.name} </div>
+                <div>{groupChatDisplay.groupName} </div>
             </div>
             <div className="action-icons">
                 <div onClick={Init} for="video" className="p-1 bg-light">

@@ -129,7 +129,7 @@ export default function ProfilePopUp({
                                 <div className="pt-3 px-3 pb-3 d-block">
                                     <div>
                                         <img
-                                            src={groupChatDisplay.profileImage}
+                                            src={groupChatDisplay.groupIcon}
                                             className="round-image"
                                             height="300px"
                                             width="300px"
@@ -161,7 +161,7 @@ export default function ProfilePopUp({
                                         </div>
                                     ) : (
                                         <div className="d-flex justify-content-between">
-                                            <div>{groupChatDisplay.name}</div>
+                                            <div>{groupChatDisplay.groupName}</div>
                                             <div
                                                 className=""
                                                 onClick={EditGroupInputForName}
@@ -173,7 +173,7 @@ export default function ProfilePopUp({
                                     <div>
                                         Created
                                         <br />
-                                        {groupChatDisplay.date}
+                                        {groupChatDisplay.creationDate}
                                     </div>
                                     {showGroupInputFor.description ? (
                                         <div className="d-flex mb-2 flex-column">
@@ -206,7 +206,7 @@ export default function ProfilePopUp({
                                                 <div>
                                                     <p>
                                                         {
-                                                            groupChatDisplay.description
+                                                            groupChatDisplay.groupDescription
                                                         }
                                                         <div className="d-none">
                                                             <p>
