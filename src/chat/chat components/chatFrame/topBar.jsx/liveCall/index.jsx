@@ -9,6 +9,7 @@ import { IoCallOutline } from "react-icons/io5";
 import { VscCallOutgoing } from "react-icons/vsc";
 import { PiPhoneCallBold } from "react-icons/pi";
 import { LiaSearchSolid } from "react-icons/lia";
+import { useThemecontext } from "../../../../../auths/context/themeContext";
 export default function TopIcons({
 	data,
 	setCallInit,
@@ -16,7 +17,9 @@ export default function TopIcons({
 	callInit,
 	setShowGroupProfile,
 	setGroupControl,
+    
 }) {
+	const theme = useThemecontext();
 	const Init = (event) => {
 		const type = event.target.getAttribute("for");
 
@@ -36,7 +39,11 @@ export default function TopIcons({
 		setShowGroupProfile(true);
 	};
 	return (
-		<div className="chat-box-top">
+		<div
+			className={
+				"chat-box-top " + (theme.isLight ? "white_grad1" : "dark_grad1")
+			}
+		>
 			<div
 				className="chat-box-top-img"
 				onClick={ImageClick}
@@ -53,7 +60,7 @@ export default function TopIcons({
 				<div
 					onClick={Init}
 					for="video"
-					className="p-2 bg-white"
+					className={"p-2 " + (theme.isLight ? "white_grad2" : "dark_grad2")}
 				>
 					{" "}
 					<IoVideocamOutline />
@@ -61,12 +68,12 @@ export default function TopIcons({
 				<div
 					onClick={Init}
 					for="audio"
-					className="p-2 bg-light"
-				> 
+					className={"p-2 " + (theme.isLight ? "white_grad2" : "dark_grad2")}
+				>
 					<VscCallOutgoing />
 				</div>
 				<div className="p-2 ">
-					<LiaSearchSolid/>
+					<LiaSearchSolid />
 				</div>
 			</div>
 			{callInit.isCall && (
@@ -76,7 +83,7 @@ export default function TopIcons({
 						data={data}
 						setCallInit={setCallInit}
 					/>
-				</div> 
+				</div>
 			)}
 		</div>
 	);

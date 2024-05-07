@@ -3,11 +3,16 @@ import SenderAudio from "../../../../../../calls/functions/audio";
 import call from "../../../../../../assets/images/call.svg";
 import groupadd from "../../../../../../assets/images/group.svg";
 import "./video.css";
+import { MdCallEnd, MdOutlineCancel } from "react-icons/md";
+import { BiUserCircle } from "react-icons/bi";
+import { IoCallOutline } from "react-icons/io5";
+import { SlCallIn } from "react-icons/sl";
+import { useThemecontext } from "../../../../../../auths/context/themeContext";
 export default function VideoCall({ socket, data, setCallInit }) {
 	const [declined, setDeclined] = useState(false);
+	const theme = useThemecontext();
 	useEffect(() => {
-		console.log(socket);
-		SenderAudio(socket, data.groupId);
+		SenderAudio(socket, data._id);
 		return () => {};
 	}, []);
 
@@ -18,14 +23,21 @@ export default function VideoCall({ socket, data, setCallInit }) {
 	}
 
 	return (
-		<div className="video-container d-flex align-items-center justify-content-center flex-column px-2 text-light bg-dark">
-			<div className="video-wrap rounded bg-success w-100 px-2">
+		<div className="video-container d-flex align-items-center justify-content-center flex-column px-2 text-dark">
+			<div
+				className={
+					"video-wrap rounded  w-100 px-2 " +
+					(theme.isLight ? "white_grad2" : "dark_grad2")
+				}
+			>
 				<div className="d-flex align-items-center p-2 justify-content-between">
 					<div>Social Connect</div>
 					<div>Encrypted</div>
-					<div onClick={StopVideo}>X</div>
+					<div onClick={StopVideo}>
+						<MdOutlineCancel />
+					</div>
 				</div>
-				<div className="video-center bg-dark rounded d-flex flex-column justify-content-center align-items-center">
+				{/* <div className="video-center white_grad1 rounded d-flex flex-column justify-content-center align-items-center">
 					<img
 						src={data.groupIcon}
 						className="round-image"
@@ -40,23 +52,20 @@ export default function VideoCall({ socket, data, setCallInit }) {
 							<small className="calling">Calling</small>
 						)}
 					</div>
-				</div>
-				<div className="py-2 d-flex align-items-center justify-content-center">
+				</div> */}
+				<video src=""></video>
+				<video
+					src=""
+					id="videoo"
+					height="auto"
+					width="100%"
+				></video>
+				<div className="py-2 d-flex align-items-center justify-content-around">
 					<div>
-						<img
-							src={groupadd}
-							height="30px"
-							className="bg-light mx-1"
-							alt=""
-						/>
+						<BiUserCircle fontSize={30} />
 					</div>
 					<div>
-						<img
-							src={call}
-							height="30px"
-							className="bg-light mx-1"
-							alt=""
-						/>
+						<MdCallEnd fontSize={30} />
 					</div>
 				</div>
 			</div>

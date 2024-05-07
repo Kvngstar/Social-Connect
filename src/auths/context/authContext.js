@@ -8,6 +8,7 @@ const AuthContext = createContext({
 	isTokenExpired: () => {},
 	login: (data) => {},
 	logout: () => {},
+	decodedToken: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
@@ -18,12 +19,22 @@ export const AuthProvider = ({ children }) => {
 		localStorage.setItem("x-auth", userToken);
 	};
 	const logout = () => {
-		
 		setToken(null);
 		localStorage.removeItem("x-auth");
 		setTimeout(() => {
 			navigate("/login");
 		}, 3000);
+	};
+	const DecodedToken = () => {
+		// const token = localStorage.getItem("x-auth");
+		try {
+			if (token) {
+				return jwtDecode(token);
+			}
+		} catch (error) {
+			console.log(error);
+			return null;
+		}
 	};
 
 	const isTokenExpired = () => {
@@ -37,6 +48,7 @@ export const AuthProvider = ({ children }) => {
 		isTokenExpired: isTokenExpired,
 		login: login,
 		logout: logout,
+		decodedToken: DecodedToken,
 	};
 
 	return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
@@ -45,3 +57,4 @@ export const AuthProvider = ({ children }) => {
 export const Login_Auth = () => {
 	return useContext(AuthContext);
 };
+

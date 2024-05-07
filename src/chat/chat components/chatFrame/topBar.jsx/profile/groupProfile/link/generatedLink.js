@@ -24,7 +24,7 @@ const GeneratedLink = ({ link, GenerateInviteLink }) => {
 						target="_blank"
 						rel="noreferrer"
 					>
-						{`https://socialconnecte.netlify.app/join?group=${link.link}`}
+						{`https://socialconnects.netlify.app/join?group=${link.link}`}
 					</a>
 					<p className="text-muted">Max Users: {link.limitActionTo}</p>
 					<div className="d-flex justify-content-between">

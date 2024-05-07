@@ -1,11 +1,15 @@
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import EmojiPicker from "../../../../../components/Emoji/picker";
 import FileReading from "../../../../../utils/filesUpload/image/image";
 import attachment from "../../../../../assets/images/attachment.svg";
 import send from "../../../../../assets/images/send.svg";
 import smiley from "../../../../../assets/images/smiley.svg";
 import toast from "react-hot-toast";
+import { Loader } from "../../../../../utils/loader/loader";
+import { useThemecontext } from "../../../../../auths/context/themeContext";
+import { CgAttachment, CgSmile } from "react-icons/cg";
+import { FiSend } from "react-icons/fi";
 export default function Textarea({
 	inputData,
 	setInputData,
@@ -14,16 +18,25 @@ export default function Textarea({
 	data,
 }) {
 	const maxSize = 1000000;
+	const theme = useThemecontext();
+	const [loading, setLoading] = useState(false);
 	function HandleInputs(event) {
 		const { name, value } = event.target;
 		setInputData((values) => {
 			return { ...values, type: name, text: value, groupId: activeChat };
 		});
 	}
+
 	function SendInformation() {
+		if (!inputData.text || inputData.text === "")
+			return toast.error("message cannot be empty");
+		setLoading(true);
 		socket.emit(
 			`grouper-message-${data._id}`,
-			_.omit(inputData, ["disableInput"])
+			_.omit(inputData, ["disableInput"]),
+			() => {
+				setLoading(false);
+			}
 		);
 
 		setInputData((values) => {
@@ -60,7 +73,9 @@ export default function Textarea({
 	}
 
 	return (
-		<div className="text-area ">
+		<div
+			className={"text-area " + (theme.isLight ? "white_grad1" : "dark_grad1")}
+		>
 			<div className="Emoji-container">
 				{inputData.addIcon && (
 					<EmojiPicker
@@ -70,22 +85,19 @@ export default function Textarea({
 				)}
 			</div>
 
-			<div className="icon-attachment">
+			<div
+				className={
+					"icon-attachment " + (theme.isLight ? "white_grad2" : "dark_grad2")
+				}
+			>
 				<div onClick={ShowIcons}>
-					<img
-						src={smiley}
-						height="15px"
-						width="auto"
-					/>
+					<CgSmile />
 				</div>
 				<div>
-					<img
-						src={attachment}
-						height="15px"
-						width="auto"
-						alt="status"
-						onClick={UploadFile}
-					/>
+					<span onClick={UploadFile}>
+						<CgAttachment />
+					</span>
+
 					<input
 						type="file"
 						id="fileUpload"
@@ -108,14 +120,14 @@ export default function Textarea({
 					/>
 				</div>
 			)}
-			<div className=" styleSendButton px-2 py-2 ">
-				<img
-					src={send}
-					height="15px"
-			 		width="auto"
-					alt="status"
-					onClick={SendInformation}
-				/>
+			<div className="styleSendButton py-2 ">
+				{loading ? (
+					Loader("syncloader", loading, undefined, 6, "grey")
+				) : (
+					<span onClick={SendInformation}>
+						<FiSend />
+					</span>
+				)}
 			</div>
 		</div>
 	);

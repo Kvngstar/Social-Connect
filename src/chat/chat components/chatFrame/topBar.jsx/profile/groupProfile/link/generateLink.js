@@ -4,7 +4,13 @@ import toast from "react-hot-toast";
 import { MdAddLink } from "react-icons/md";
 import Button from "../../../../../../../components/Emoji/button/button";
 
-const LinkGenerator = ({ link, socket, activeChat, setLoadedData }) => {
+const LinkGenerator = ({
+	link,
+	socket,
+	activeChat,
+	setLoadedData,
+
+}) => {
 	const [userCount, setUserCount] = useState(1);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
@@ -20,10 +26,13 @@ const LinkGenerator = ({ link, socket, activeChat, setLoadedData }) => {
 	};
 
 	function GenerateInviteLink(count) {
+		setIsLoading(true);
 		socket.emit("generate-invite_link", count, activeChat, (link, count) => {
 			console.log(link);
+
 			if (!link) toast.success("Link deactivated");
 			else toast.success("Link generated");
+			setIsLoading(false);
 			setLoadedData((values) => {
 				return values.map((obj) => {
 					if (obj._id === activeChat) {

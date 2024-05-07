@@ -1,12 +1,23 @@
 import React from "react";
-import { DecodedToken } from "../../../../../../auths/jwt/authToken";
+import { GoFileMedia } from "react-icons/go";
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import {
+	MdExitToApp,
+	MdOutlineAccountBalance,
+	MdOutlineInsertLink,
+} from "react-icons/md";
+import { RiErrorWarningLine } from "react-icons/ri";
+import { Login_Auth } from "../../../../../../auths/context/authContext";
+import { useThemecontext } from "../../../../../../auths/context/themeContext";
 import LinkGenerator from "./link/generateLink";
 import Members from "./members/members";
 import Overview from "./overview/overview";
-import { RiErrorWarningLine } from "react-icons/ri";
-import { HiOutlineUserGroup } from "react-icons/hi2";
-import { GoFileMedia } from "react-icons/go";
-import { MdOutlineInsertLink } from "react-icons/md";
+import Leavegroup from "./leave/user/leave";
+import RemoveUser from "./leave/admin/removeUser";
+import DisbandGroup from "./leave/admin/leaveGroup";
+import ChooseAdmin from "./leave/admin/chooseAdmin";
+import AdminLeaveGroup from "./leave/admin/leaveGroup";
+import DeleteGroup from "./leave/admin/deleteGroup";
 
 export default function ProfilePopUp({
 	data,
@@ -15,7 +26,11 @@ export default function ProfilePopUp({
 	activeChat,
 	groupControl,
 	setGroupControl,
+	setShowGroupProfile,
+	
 }) {
+	const auth = Login_Auth();
+	const theme = useThemecontext();
 	const ToggleProfileNav = (element) => {
 		let navItems = document.querySelectorAll(".nav-item-profile");
 		navItems.forEach((item) => {
@@ -57,6 +72,7 @@ export default function ProfilePopUp({
 				members: true,
 				media: false,
 				links: false,
+				leave: false,
 			};
 		});
 	};
@@ -67,6 +83,7 @@ export default function ProfilePopUp({
 				members: false,
 				media: false,
 				links: false,
+				leave: false,
 			};
 		});
 	};
@@ -77,6 +94,7 @@ export default function ProfilePopUp({
 				members: false,
 				media: true,
 				links: false,
+				leave: false,
 			};
 		});
 	};
@@ -87,16 +105,33 @@ export default function ProfilePopUp({
 				members: false,
 				media: false,
 				links: true,
+				leave: false,
+			};
+		});
+	};
+	const LeaveGroup = () => {
+		setGroupControl((values) => {
+			return {
+				overview: false,
+				members: false,
+				media: false,
+				links: false,
+				leave: true,
 			};
 		});
 	};
 
 	return (
 		<>
-			<div className="profile-popup rounded d-flex">
-				<div className="group-menu white_grad1  d-flex flex-column p-1">
+			<div className="profile-popup py-2  d-flex">
+				<div
+					className={
+						"group-menu  d-flex flex-column p-1 " +
+						(theme.isLight ? "white_grad2" : "dark_grad2")
+					}
+				>
 					<div
-						className="active-item d-flex align-items-center nav-item-profile rounded"
+						className="active-item d-flex align-items-center nav-item-profile "
 						onClick={(event) => {
 							ShowOverview();
 							ToggleProfileNav(event);
@@ -106,7 +141,7 @@ export default function ProfilePopUp({
 						<span className="px-1"> Overview</span>
 					</div>
 					<div
-						className="nav-item-profile rounded d-flex align-items-center"
+						className="nav-item-profile  d-flex align-items-center"
 						onClick={(event) => {
 							ShowMembers();
 							ToggleProfileNav(event);
@@ -118,7 +153,7 @@ export default function ProfilePopUp({
 						<span>Members</span>
 					</div>
 					<div
-						className="nav-item-profile rounded d-flex align-items-center"
+						className="nav-item-profile  d-flex align-items-center"
 						onClick={(event) => {
 							ShowMedia();
 							ToggleProfileNav(event);
@@ -130,9 +165,9 @@ export default function ProfilePopUp({
 						<span>Media</span>
 					</div>
 
-					{DecodedToken().username === data.adminUsername && (
+					{auth.decodedToken().username === data.adminUsername && (
 						<div
-							className="nav-item-profile rounded d-flex align-items-center"
+							className="nav-item-profile  d-flex align-items-center"
 							onClick={(event) => {
 								Showlinks();
 								ToggleProfileNav(event);
@@ -144,14 +179,53 @@ export default function ProfilePopUp({
 							<span>Links</span>
 						</div>
 					)}
+
+					{auth.decodedToken().username === data.adminUsername ? (
+						<div
+							className="nav-item-profile d-flex text-danger align-items-center"
+							onClick={(event) => {
+								LeaveGroup();
+								ToggleProfileNav(event);
+							}}
+						>
+							<span className="px-1">
+								<MdOutlineAccountBalance />
+							</span>
+
+							<span>Manage</span>
+						</div>
+					) : (
+						<div
+							className="nav-item-profile text-danger  d-flex align-items-center"
+							onClick={(event) => {
+								LeaveGroup();
+								ToggleProfileNav(event);
+							}}
+						>
+							<span className="px-1">
+								<MdExitToApp />
+							</span>
+							<span>Leave group</span>
+						</div>
+					)}
 				</div>
-				<div className="view-group-menu rounded white_grad2">
-					{groupControl.overview && <Overview data={data} />}
+				<div
+					className={
+						"view-group-menu " + (theme.isLight ? "white_grad1" : "dark_grad1")
+					}
+				>
+					{groupControl.overview && (
+						<Overview
+							data={data}
+							socket={socket}
+							setLoadedData={setLoadedData}
+						/>
+					)}
 
 					{groupControl.members && <Members data={data} />}
 
 					{groupControl.links &&
-						DecodedToken().username === data.adminUsername && (
+						auth.decodedToken().username === data.adminUsername && (
 							<LinkGenerator
 								socket={socket}
 								setLoadedData={setLoadedData}
@@ -159,6 +233,51 @@ export default function ProfilePopUp({
 								link={data.inviteLinke}
 							/>
 						)}
+
+					{groupControl.leave ? (
+						auth.decodedToken().username === data.adminUsername ? (
+							<div>
+								{data.members.length > 1 ? (
+									<div>
+										<RemoveUser
+											data={data}
+											socket={socket}
+											setLoadedData={setLoadedData}
+											activeChat={activeChat}
+										/>
+										<ChooseAdmin
+											data={data}
+											socket={socket}
+											setLoadedData={setLoadedData}
+											activeChat={activeChat}
+											setGroupControl={setGroupControl}
+											setShowGroupProfile={setShowGroupProfile}
+										/>
+									</div>
+								) : (
+									""
+								)}
+								<DeleteGroup
+									socket={socket}
+									setLoadedData={setLoadedData}
+									activeChat={activeChat}
+									setGroupControl={setGroupControl}
+									setShowGroupProfile={setShowGroupProfile}
+								
+								/>
+							</div>
+						) : (
+							<Leavegroup
+								socket={socket}
+								setLoadedData={setLoadedData}
+								activeChat={activeChat}
+								setGroupControl={setGroupControl}
+								setShowGroupProfile={setShowGroupProfile}
+							/>
+						)
+					) : (
+						""
+					)}
 				</div>
 			</div>
 		</>

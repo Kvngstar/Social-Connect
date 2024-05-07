@@ -3,23 +3,23 @@ import Profile from "./profile";
 import TopIcons from "./liveCall";
 import { useState } from "react";
 export default function Topbar({
-	setLoadedData,
 	data,
 	socket,
 	showGroupProfile,
-	groupChatDisplay,
 	activeChat,
 	callInit,
 	setCallInit,
-	userGroupData,
 	isPersonalChat,
 	setShowGroupProfile,
+	setLoadedData,
+    setActiveChat,
 }) {
 	const [groupControl, setGroupControl] = useState({
 		overview: true,
 		members: false,
 		media: false,
 		links: false,
+		leave: false,
 	});
 	return (
 		<div>
@@ -32,6 +32,8 @@ export default function Topbar({
 				isPersonalChat={isPersonalChat}
 				groupControl={groupControl}
 				setGroupControl={setGroupControl}
+                setShowGroupProfile={setShowGroupProfile}
+                setActiveChat={setActiveChat}
 			/>
 			<TopIcons
 				data={data}
@@ -39,48 +41,9 @@ export default function Topbar({
 				socket={socket}
 				callInit={callInit}
 				setShowGroupProfile={setShowGroupProfile}
-                setGroupControl={setGroupControl}
+				setGroupControl={setGroupControl}
+                setActiveChat={setActiveChat}
 			/>
 		</div>
 	);
 }
-
-// 	<ProfilePopUp
-// 		GenerateInviteLink={GenerateInviteLink}
-// 		groupControl={groupControl}
-// 		setGroupControl={setGroupControl}
-// 		showGroupInputFor={showGroupInputFor}
-// 		userGroupData={userGroupData}
-// 		setGroupShowInputFor={setGroupShowInputFor}
-// 		ToggleProfileNav={ToggleProfileNav}
-// 		groupChatDisplay={groupChatDisplay}
-// 		data={loadedData[chatIndex || 0]}
-// 		setGeneratedLink={setGeneratedLink}
-// 		generatedLink={generatedLink}
-// 	/>
-
-// <ChatBoxTop
-// 	setCallInit={setCallInit}
-// 	ShowGroupProfile={ShowGroupProfile}
-// 	socketState={socket.current}
-// 	userGroupData={loadedData[chatIndex]}
-// />// 	<ProfilePopUp
-// 		GenerateInviteLink={GenerateInviteLink}
-// 		groupControl={groupControl}
-// 		setGroupControl={setGroupControl}
-// 		showGroupInputFor={showGroupInputFor}
-// 		userGroupData={userGroupData}
-// 		setGroupShowInputFor={setGroupShowInputFor}
-// 		ToggleProfileNav={ToggleProfileNav}
-// 		groupChatDisplay={groupChatDisplay}
-// 		data={loadedData[chatIndex || 0]}
-// 		setGeneratedLink={setGeneratedLink}
-// 		generatedLink={generatedLink}
-// 	/>
-
-// <ChatBoxTop
-// 	setCallInit={setCallInit}
-// 	ShowGroupProfile={ShowGroupProfile}
-// 	socketState={socket.current}
-// 	userGroupData={loadedData[chatIndex]}
-// />

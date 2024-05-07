@@ -14,7 +14,8 @@ export default function MessagingBox({
 	socket,
 	activeChat,
 	unReadMessage,
-    scrollInToView
+    scrollInToView,
+    setChatIndex
 }) {
 	const auth = Login_Auth();
 	const [inputData, setInputData] = useState({
