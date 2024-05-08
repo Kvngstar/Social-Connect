@@ -5,7 +5,7 @@ export default function GroupOutlineCont({ v, DisplayChats, userGroupData }) {
 	return (
 		<div
 			key={v._id}
-			className="short-box pe-2  rounded py-2"
+			className="short-box  pe-2  rounded py-2"
 			onClick={() => {
 				DisplayChats(v._id);
 			}}
@@ -22,31 +22,42 @@ export default function GroupOutlineCont({ v, DisplayChats, userGroupData }) {
 					<div className="me-3 ">
 						<div>{v.groupName}</div>
 
-						<div
-							className="last-message"
-							_id={v._id}
-						>
+						<div>
 							{" "}
 							<small>
-								<small>
+								<small
+									className="last-message"
+									_id={v._id}
+								>
 									{v.groupMessages.length < 1
 										? ""
 										: v.groupMessages[v.groupMessages.length - 1].type ===
 										  "image"
 										? "image file"
-										: v.groupMessages[v.groupMessages.length - 1].text}
+										: "~" +
+										  v.groupMessages[v.groupMessages.length - 1].username +
+										  ": " +
+										  v.groupMessages[v.groupMessages.length - 1].text}
 								</small>
 							</small>
 						</div>
 					</div>
 				</div>
 				<div className="d-flex ps-3 justify-content-between">
-					<div className="d-flex flex-column">
+					<div
+						className="d-flex flex-column"
+						style={{ minWidth: "52px" }}
+					>
 						<div>
 							<small>
 								<small>
 									{v.groupMessages.length > 0
-										? new Date("2024-04-01").toDateString().slice(4, 10)
+										? new Date(
+												v.groupMessages[v.groupMessages.length - 1].date
+										  ).toLocaleTimeString([], {
+												hour: "2-digit",
+												minute: "2-digit",
+										  })
 										: ""}
 								</small>
 							</small>
@@ -60,9 +71,12 @@ export default function GroupOutlineCont({ v, DisplayChats, userGroupData }) {
 										<div
 											key={i}
 											className="bg-success p-1 py-0 d-flex align-items-center justify-content-center rounded-pill  text-light"
-											style={{ width: "20px", height: "20px" ,fontSize:"12px"}}
+											style={{
+												width: "20px",
+												height: "20px",
+												fontSize: "12px",
+											}}
 										>
-										
 											{b.numberOfNewMessages}
 										</div>
 									);

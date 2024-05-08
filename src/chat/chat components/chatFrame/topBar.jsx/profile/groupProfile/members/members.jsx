@@ -1,9 +1,10 @@
 import React from "react";
 import groupAdd from "../../../../../../../assets/images/group-add.svg";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 export default function Members({ data }) {
 	return (
-		<div className=" pt-3 px-3 pb-3 text-dark ">
+		<div className=" pt-3 px-3 pb-3">
 			<div className="p-1">
 				<div className="fw-bold px-3 mb-2">({data.members.length})</div>
 				<div className="px-3">
@@ -23,7 +24,7 @@ export default function Members({ data }) {
 									<div>{v}</div>
 								</div>
 								{data.adminUsername === v ? (
-									<div className="me-1">admin</div>
+									<div className="me-1"><MdOutlineAdminPanelSettings /></div>
 								) : (
 									""
 								)}

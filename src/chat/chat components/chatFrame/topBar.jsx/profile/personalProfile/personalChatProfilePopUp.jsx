@@ -74,7 +74,7 @@ export default function PersonalProfilePopUp({
 							Links
 						</div>
 					</div>
-					<div className="view-group-menu bg-light">
+					<div className="view-group-menu">
 						{personalChatControl.overview == true && (
 							<div className="pt-3 px-3 pb-3 d-block">
 								<div>

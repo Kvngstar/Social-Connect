@@ -4,45 +4,67 @@ import groupAdd from "../../../../../../assets/images/group-add.svg";
 import toast from "react-hot-toast";
 import { SlPicture } from "react-icons/sl";
 import Button from "../../../../../../components/Emoji/button/button";
-
+import { useThemecontext } from "../../../../../../auths/context/themeContext";
+import { Login_Auth } from "../../../../../../auths/context/authContext";
+import _ from "lodash";
 export default function CreateNewGroup({
 	socket,
 	setControls,
 	controls,
 	setShowCreateGroup,
 	setLoadedData,
+	setChatIndex,
+	loadedData,
+	setActiveChat,
 }) {
 	const [newGroupData, setGroupData] = useState({
 		groupIcon: "",
 		groupName: "",
 		groupDescription: "",
 	});
+	const theme = useThemecontext();
 	const [loading, setLoading] = useState(false);
 	const maxSize = 1000000;
+	const auth = Login_Auth();
 
 	const SubmitNewGroup = () => {
-		setLoading(true);
-		socket.emit("new-group", newGroupData, (response) => {
-            toast.success(response);
-            setLoading(false);
-            
+		setLoading(() => true);
+		socket.emit("new-group", newGroupData, (error, response, group) => {
+			setLoading(false);
+			if (error) return toast.error(error);
+			toast.success(response);
+
 			setControls((values) => {
-                return {
-                    newChat: !controls.newChat,
+				return {
+					newChat: !controls.newChat,
 					next: !controls.next,
 				};
 			});
-			setGroupData((values) => {
-                return { groupIcon: "", groupName: "", groupDescription: "" };
+			const username = auth.decodedToken().username;
+			const filterData = _.omit(group, ["groupParticipants", "adminId"]);
+
+			const constructGroup = {
+				members: [username],
+				adminUsername: username,
+				...filterData,
+			};
+
+			setGroupData(() => {
+				return { groupIcon: "", groupName: "", groupDescription: "" };
 			});
-            setShowCreateGroup(false);
-			setTimeout(() => {
-				socket.emit("reload-UserData", (v) => {
-					setLoadedData(() => v);
-				});
-			}, 1000);
+			setLoadedData((values) => {
+				return [constructGroup, ...values];
+			});
+			setChatIndex((v) => {
+				if (loadedData.length === 0) {
+					setActiveChat(group._id);
+					return 0;
+				} else {
+					return v + 1;
+				}
+			});
+			setShowCreateGroup(false);
 		});
-        setLoading(false)
 	};
 
 	function HandleNewGroupData(event) {

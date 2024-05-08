@@ -1,23 +1,32 @@
 import React from "react";
 import GroupOutlineCont from "./groupBlock/block";
 import NoGroupOutline from "./noGroupBlock/block";
+import CreateGroup from "./createGroup/create";
 
-export default function Outline({ loadedData, DisplayChats, userGroupData }) {
+export default function Outline({
+	loadedData,
+	DisplayChats,
+	userGroupData,
+	loading,
+	loaded,
+}) {
 	return (
 		<div className="container-short-box">
-			{loadedData.length > 0 ? (
+			{!loaded && loadedData.length > 0 ? (
 				loadedData.map((v) => {
 					return (
 						<GroupOutlineCont
-                        v={v}
+							v={v}
 							DisplayChats={DisplayChats}
 							loadedData={loadedData}
 							userGroupData={userGroupData}
 						/>
 					);
 				})
+			) : !loaded && loadedData.length <= 0 ? (
+				<CreateGroup/>
 			) : (
-				<NoGroupOutline />
+				<NoGroupOutline loading={loading} />
 			)}
 		</div>
 	);

@@ -2,8 +2,10 @@ import React from "react";
 import groupAdd from "../../../../../assets/images/group-add.svg";
 import { GrGroup } from "react-icons/gr";
 import { LuUser2 } from "react-icons/lu";
+import { useThemecontext } from "../../../../../auths/context/themeContext";
 
 export default function NewChat({ setControls, setShowCreateGroup, controls }) {
+    const theme = useThemecontext()
 	function NewGroup() {
 		setControls((values) => {
 			return {
@@ -16,8 +18,8 @@ export default function NewChat({ setControls, setShowCreateGroup, controls }) {
 	}
 
 	return (
-		<div className="new-group text-dark d-block p-1">
-			<div className="fw-bold px-3">NEW CHAT</div>
+		<div className={"new-group d-block py-2 " + (theme.isLight ? "white_grad1" : "dark_grad1 border-3 border-dark")}>
+			<div className="fw-bold px-3 text-center">NEW CHAT</div>
 			{/* <div className="px-3">
                 <input type="text" className="input" />
             </div> */}

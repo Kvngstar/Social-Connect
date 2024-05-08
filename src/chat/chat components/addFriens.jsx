@@ -21,7 +21,7 @@ export default function AddFriends({ AddFriends, Next }) {
 					</div>
 					<div className="mt-2 mb-2">All friends</div>
 					<div className="new-group-overview">
-						<div className="d-flex justify-content-between align-items-center pe-2 bg-light rounded py-2">
+						<div className="d-flex justify-content-between align-items-center pe-2 rounded py-2">
 							<div className="d-flex  align-items-center">
 								<div className="px-3">
 									<img

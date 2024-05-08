@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { BiEditAlt } from "react-icons/bi";
 import Button from "../../../../../../../components/Emoji/button/button";
-export default function Overview({ data }) {
+import toast from "react-hot-toast";
+import { Login_Auth } from "../../../../../../../auths/context/authContext";
+export default function Overview({ data, socket, setLoadedData }) {
+	const auth = Login_Auth();
+	const [showMore, setShowMore] = useState(false);
 	const [showGroupInputFor, setGroupShowInputFor] = useState({
 		groupName: false,
 		displayPhoto: false,
@@ -38,15 +42,68 @@ export default function Overview({ data }) {
 
 		document.getElementById("file2").click();
 	}
+	const ToggleAbout = () => {
+		document.getElementById("about").classList.toggle("d-none");
+		setShowMore((v) => !v);
+	};
+	const [formData, setFormData] = useState({
+		type: "",
+		new: "",
+	});
+	function HandleChange(event) {
+		const { name, value } = event.target;
+		let newVariable;
+		if (name === "description") {
+			newVariable = "groupDescription";
+		} else if (name === "name") {
+			newVariable = "groupName";
+		}
+		setFormData((v) => {
+			return { type: newVariable, new: value };
+		});
+	}
+	function SendNewData() {
+		setLoading(true);
+		if (!formData.type || !formData.new) {
+			return toast.error("Space cannot be blank");
+		}
+		socket.emit(
+			"resetGroupInfo",
+			data._id,
+			formData,
+			(error, message, type, newData) => {
+				setLoading(false);
+				toast.success(message);
+				if (error) return toast.error(error);
+				setLoadedData((v) => {
+					return v.map((b) => {
+						if (b._id === data._id) {
+							return { ...b, [type]: newData };
+						} else {
+							return b;
+						}
+					});
+				});
+				setFormData((v) => {
+					return { type: "", new: "" };
+				});
+				setGroupShowInputFor({
+					groupName: false,
+					displayPhoto: false,
+					description: false,
+				});
+			}
+		);
+	}
 
 	return (
 		<div className="pt-3 px-3 pb-3 d-block">
 			<div className="d-flex mt-2 justify-content-between">
 				<img
 					src={data.groupIcon}
-					className="round-image"
+					className="groupIcon shadow-sm"
 					height="300px"
-					width="300px"
+					width="500px"
 					alt=""
 				/>
 				<input
@@ -56,25 +113,31 @@ export default function Overview({ data }) {
 					hidden
 					alt=""
 				/>
-				<div
-					className=""
-					onClick={ChangeGroupProfileImage}
-				>
-					<BiEditAlt />
-				</div>
+
+				{auth.decodedToken().username === data.adminUsername && (
+					<div
+						className=""
+						onClick={ChangeGroupProfileImage}
+					>
+						<BiEditAlt />
+					</div>
+				)}
 			</div>
 
 			{showGroupInputFor.groupName ? (
 				<div className="d-flex mb-2 mt-2 flex-column">
 					<input
 						type="text"
-						name=""
+						name="groupName"
+						value={formData.new}
+						onChange={HandleChange}
 						className="input"
 						id=""
 						placeholder="Change group name "
 					/>
 					<div className="mt-2 d-flex justify-content-between">
 						<Button
+							func={SendNewData}
 							text={"Change"}
 							loading={loading}
 							fullWidth={false}
@@ -90,25 +153,29 @@ export default function Overview({ data }) {
 				</div>
 			) : (
 				<div className="d-flex mt-2 justify-content-between">
-					<div>{data.groupName}</div>
-					<div
-						className=""
-						onClick={EditGroupInputForName}
-					>
-						<BiEditAlt />
-					</div>
+					<div className="fs-5">{data.groupName}</div>
+					{auth.decodedToken().username === data.adminUsername && (
+						<div
+							className=""
+							onClick={EditGroupInputForName}
+						>
+							<BiEditAlt />
+						</div>
+					)}
 				</div>
 			)}
-			<div>
-				Created
+			<div className="mt-2">
+				<span className="fw-bold">Created on</span>
 				<br />
-				{data.creationDate}
+				{new Date(data.creationDate).toLocaleDateString()}
 			</div>
 			{showGroupInputFor.description ? (
-				<div className="d-flex mb-2 flex-column">
+				<div className="d-flex mb-2  flex-column">
 					<input
 						type="text"
-						name=""
+						name="description"
+						value={formData.new}
+						onChange={HandleChange}
 						className="input"
 						id=""
 						placeholder="Change Group Description"
@@ -119,7 +186,7 @@ export default function Overview({ data }) {
 								text={"Change"}
 								loading={loading}
 								fullWidth={false}
-								// func={SubmitNewProfileData}
+								func={SendNewData}
 							/>
 
 							<Button
@@ -131,33 +198,27 @@ export default function Overview({ data }) {
 					</div>
 				</div>
 			) : (
-				<div className="d-flex justify-content-between">
+				<div className="d-flex mt-2 justify-content-between">
 					<div>
-						Description
-						<br />
-						<div>
-							<p>
-								{data.groupDescription}
-								<div className="d-none">
-									<p>
-										We trust God for His enabling grace to show ultimate concern
-										to the spiritual welfare of the brethren and students in the
-										campus.
-									</p>
-									Days of Fellowship Sunday - 8:00am Tuesday - 5:00pm Thursday -
-									5:00pm
-									<p>
-										P.S - Kindly note that all fellowship activities holds at
-										*Chemical Engineering Building (Main school)*. And also 👇
-									</p>
-								</div>
-							</p>
-							<div>show more</div>
+						<div className="fw-bold">Description</div>
+						<div className="">
+							{data.groupDescription.substring(0, 50)}
+							<div
+								className="d-none"
+								id="about"
+							>
+								{data.groupDescription.substring(50)}
+							</div>
+							<div onClick={ToggleAbout}>
+								{showMore ? "show less" : "show more"}
+							</div>
 						</div>
 					</div>
-					<div onClick={EditGroupInputForDescription}>
-						<BiEditAlt />
-					</div>
+					{auth.decodedToken().username === data.adminUsername && (
+						<div onClick={EditGroupInputForDescription}>
+							<BiEditAlt />
+						</div>
+					)}
 				</div>
 			)}
 		</div>
