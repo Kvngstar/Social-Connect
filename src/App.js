@@ -20,6 +20,14 @@ function App() {
 				element={<Register />}
 			/>
 			<Route
+				path="login"
+				element={<Login />}
+			/>
+			<Route
+				path="/login/:id"
+				element={<Login />}
+			/>
+			<Route
 				path="chat"
 				element={
 					<PrivateRoute>
