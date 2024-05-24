@@ -38,8 +38,11 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const isTokenExpired = () => {
-		const decodedToken = jwtDecode(token);
-		return decodedToken.exp < Date.now() / 1000;
+		if (token) {
+			const decodedToken = jwtDecode(token);
+			return decodedToken.exp < Date.now() / 1000;
+		}
+		return true;
 	};
 
 	const values = {
