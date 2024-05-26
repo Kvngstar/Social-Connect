@@ -14,8 +14,11 @@ export default function MessagingBox({
 	socket,
 	activeChat,
 	unReadMessage,
-    scrollInToView,
-    setChatIndex
+	scrollInToView,
+	setChatIndex,
+	scrollPostion,
+	setScrollPostion,
+	setUnreadMessage,
 }) {
 	const auth = Login_Auth();
 	const [inputData, setInputData] = useState({
@@ -53,8 +56,11 @@ export default function MessagingBox({
 						data={data}
 						getDom={getDom}
 						groupcontrol={group_control}
-                        unReadMessage={unReadMessage}
-                        scrollInToView={scrollInToView}
+						unReadMessage={unReadMessage}
+						scrollPostion={scrollPostion}
+						setScrollPostion={setScrollPostion}
+						scrollInToView={scrollInToView}
+                        setUnreadMessage={setUnreadMessage}
 					/>
 				</div>
 				{inputData.type === "image" && (

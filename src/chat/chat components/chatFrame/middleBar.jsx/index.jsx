@@ -1,30 +1,53 @@
 import { jwtDecode } from "jwt-decode";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getToken from "../../../../auths/jwt/authToken";
 import "./chat.css";
 import { CgProfile } from "react-icons/cg";
 import { Login_Auth } from "../../../../auths/context/authContext";
 import { useThemecontext } from "../../../../auths/context/themeContext";
+import { FiArrowDown } from "react-icons/fi";
 const MessageArea = ({
 	data,
 	getDom,
 	group_control,
 	unReadMessage,
 	scrollInToView,
+	scrollPostion,
+	setScrollPostion,
+	setUnreadMessage,
 }) => {
-	const [showIcon, setShowIcon] = useState(false);
-	const [text, setText] = useState("");
 	const auth = Login_Auth();
 	const theme = useThemecontext();
-	// const [prevDate, setPrevDate] = useState(
-	// 	new Date(data?.groupMessages[0]?.date).toISOString().slice(0, 10) ||
-	// 		new Date()
-	// );
+	useEffect(() => {
+		const ScrollFunc = () => {
+			let scrollposition =
+				getDom.current.scrollTop +
+				getDom.current.parentElement.computedStyleMap().get("height").value +
+				20;
+			let childHeight = getDom.current.children[0].clientHeight;
+			// let parentHeight = getDom.current.clientHeight;
 
-	function getInput(event) {
-		const { name, value } = event.target;
-		setText(value);
-	}
+			if (Math.ceil(scrollposition) < childHeight) {
+				setScrollPostion(true);
+			} else {
+				setScrollPostion(false);
+				setUnreadMessage(0);
+			}
+			if (scrollPostion) {
+			}
+		};
+		ScrollFunc();
+
+		const scrollListener = getDom.current.addEventListener(
+			"scroll",
+			ScrollFunc
+		);
+
+		return () => {
+			getDom.current.removeEventListener("scroll", scrollListener);
+		};
+	}, [unReadMessage]);
+
 	function IsItYesterday(givenDateString) {
 		// Get the current date
 		const currentDate = new Date();
@@ -60,19 +83,18 @@ const MessageArea = ({
 
 	return (
 		<div className="messageUs rounded box-position">
-			{unReadMessage > 0 && (
-				<div
-					onClick={scrollInToView}
-					className="rounded d-inline position-absolute z-1 pop_up d-flex align-items-center"
-				>
-					<div
-						className="bg-success rounded-circle text-light d-flex align-items-center justify-content-center me-1 "
-						style={{ width: "20px", height: "20px" }}
+			{(scrollPostion || unReadMessage > 0) && (
+				<div className="rounded d-flex align-items-center justify-content-center position-absolute z-2 pop_up d-flex align-items-center bg-danger text-light">
+					<span
+						onClick={() => {
+							getDom.current.children[0].lastElementChild.scrollIntoView({
+								behavior: "smooth",
+							});
+						}}
 					>
-						{" "}
-						<small>{unReadMessage}</small>{" "}
-					</div>
-					<div>unread messages</div>
+						{unReadMessage > 0 ? <div>{unReadMessage}</div> : ""}
+						<FiArrowDown />
+					</span>{" "}
 				</div>
 			)}
 			<div
@@ -96,7 +118,7 @@ const MessageArea = ({
 										new Date(data.groupMessages[index - 1].date)
 											.toISOString()
 											.slice(0, 10) ? (
-										<div className="text-center my-2 ">
+										<div className="text-center my-5 position-sticky top-0">
 											<span className="bg-success p-2 rounded-pill">
 												<small>
 													{IsItToday(v.date)
@@ -113,6 +135,8 @@ const MessageArea = ({
 
 									{v.type !== "joined" &&
 									v.type !== "left" &&
+									v.type !== "changedProfile" &&
+									v.type !== "deleteGroup" &&
 									jwtDecode(auth.token)._id === v._userId ? (
 										<div
 											className={
@@ -155,7 +179,10 @@ const MessageArea = ({
 												})}
 											</span>
 										</div>
-									) : v.type !== "joined" && v.type !== "left" ? (
+									) : v.type !== "joined" &&
+									  v.type !== "left" &&
+									  v.type !== "deleteGroup" &&
+									  v.type !== "changedProfile" ? (
 										<div
 											className={
 												"me-4 admin_textbox " +
@@ -174,10 +201,7 @@ const MessageArea = ({
 											) : (
 												<div className="d-flex align-items-center mb-2">
 													<CgProfile size={20} />
-													<div className="poppinsemibold ms-2 fontsize12">
-														{" "}
-														{v.text}
-													</div>
+													<div className="ms-2 fontsize12"> {v.text}</div>
 												</div>
 											)}
 											<span className="chat_date">

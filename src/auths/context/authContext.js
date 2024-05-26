@@ -60,4 +60,3 @@ export const AuthProvider = ({ children }) => {
 export const Login_Auth = () => {
 	return useContext(AuthContext);
 };
-
