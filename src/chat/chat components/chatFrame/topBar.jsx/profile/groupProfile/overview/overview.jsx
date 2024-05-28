@@ -3,14 +3,18 @@ import { BiEditAlt } from "react-icons/bi";
 import Button from "../../../../../../../components/Emoji/button/button";
 import toast from "react-hot-toast";
 import { Login_Auth } from "../../../../../../../auths/context/authContext";
+import FileReading from "../../../../../../../utils/filesUpload/image/image";
+import { Loader } from "../../../../../../../utils/loader/loader";
+
 export default function Overview({ data, socket, setLoadedData }) {
 	const auth = Login_Auth();
-	const [showMore, setShowMore] = useState(false);
+	const [showMore, setShowMore] = useState(true);
 	const [showGroupInputFor, setGroupShowInputFor] = useState({
 		groupName: false,
 		displayPhoto: false,
 		description: false,
 	});
+	const maxSize = 1000000;
 	const [loading, setLoading] = useState(false);
 	function EditGroupInputForName() {
 		setGroupShowInputFor((values) => {
@@ -65,25 +69,42 @@ export default function Overview({ data, socket, setLoadedData }) {
 	function SendNewData() {
 		setLoading(true);
 		if (!formData.type || !formData.new) {
+			setLoading(false);
 			return toast.error("Space cannot be blank");
 		}
-		socket.emit(
-			"resetGroupInfo",
-			data._id,
-			formData,
-			(error, message, type, newData) => {
+		socket.emit("resetGroupInfo", data._id, formData, (error, message) => {
+			setLoading(false);
+			toast.success(message);
+			if (error) return toast.error(error);
+			setFormData((v) => {
+				return { type: "", new: "" };
+			});
+			setGroupShowInputFor({
+				groupName: false,
+				displayPhoto: false,
+				description: false,
+			});
+		});
+	}
+
+	const UpdateGroupPicture = async () => {
+		try {
+			setLoading(true);
+			const element = document.getElementById("file2");
+			if (element.files[0].size > maxSize) {
 				setLoading(false);
-				toast.success(message);
+				toast.error("image must be less than 1MB");
+				element.value = "";
+				return;
+			}
+			// Encode to base64
+			const base64 = await FileReading(element.files[0]);
+			const formData = { type: "groupIcon", new: base64 };
+
+			socket.emit("resetGroupInfo", data._id, formData, (error, message) => {
+				setLoading(false);
 				if (error) return toast.error(error);
-				setLoadedData((v) => {
-					return v.map((b) => {
-						if (b._id === data._id) {
-							return { ...b, [type]: newData };
-						} else {
-							return b;
-						}
-					});
-				});
+				toast.success(message);
 				setFormData((v) => {
 					return { type: "", new: "" };
 				});
@@ -92,9 +113,12 @@ export default function Overview({ data, socket, setLoadedData }) {
 					displayPhoto: false,
 					description: false,
 				});
-			}
-		);
-	}
+			});
+		} catch (error) {
+			console.log(error.message);
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="pt-3 px-3 pb-3 d-block">
@@ -110,6 +134,7 @@ export default function Overview({ data, socket, setLoadedData }) {
 					type="file"
 					name="file"
 					id="file2"
+					onChange={UpdateGroupPicture}
 					hidden
 					alt=""
 				/>

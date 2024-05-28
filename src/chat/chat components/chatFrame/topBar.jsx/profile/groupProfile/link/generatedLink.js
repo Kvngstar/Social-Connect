@@ -26,7 +26,7 @@ const GeneratedLink = ({ link, GenerateInviteLink }) => {
 					>
 						{`https://socialconnects.netlify.app/join?group=${link.link}`}
 					</a>
-					<p className="text-muted">Max Users: {link.limitActionTo}</p>
+					<p className="text-muted">Max Users: {link.limitActionTo || 0}</p>
 					<div className="d-flex justify-content-between">
 						<Button
 							text={"Copy"}

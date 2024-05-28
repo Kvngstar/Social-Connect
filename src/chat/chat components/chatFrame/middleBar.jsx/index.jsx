@@ -220,19 +220,76 @@ const MessageArea = ({
 												})}
 											</span>
 										</div>
-									) : v.type === "joined" ? (
-										<div className="text-center ">
+									) : v.type !== "changedProfile" &&
+									  v.type !== "deleteGroup" &&
+									  v.type !== "left" ? (
+										<div className="text-center my-2">
 											<span className="bg-success  p-2 rounded-pill ">
 												<small>
-													<small>{v.text}</small>
+													<small>
+														{v.username === auth.decodedToken().username
+															? "You joined"
+															: v.text}
+													</small>
+												</small>
+											</span>
+										</div>
+									) : v.type !== "changedProfile" &&
+									  v.type !== "deleteGroup" ? (
+										<div className="text-center my-2">
+											<span className="bg-info  p-2 rounded-pill ">
+												<small>
+													<small>
+														{v.username === auth.decodedToken().username &&
+														v.username === data.adminUsername
+															? v.text.replace(
+																	`admin ~${auth.decodedToken().username}`,
+																	"You"
+															  )
+															: v.username !== auth.decodedToken().username &&
+															  new RegExp(
+																	auth.decodedToken().username,
+																	"gi"
+															  ).test(v.text)
+															? v.text.replace(
+																	auth.decodedToken().username,
+																	"you"
+															  )
+															: v.username === auth.decodedToken().username &&
+															  new RegExp(
+																	auth.decodedToken().username,
+																	"gi"
+															  ).test(v.text)
+															? "You left"
+															: v.text}
+													</small>
+												</small>
+											</span>
+										</div>
+									) : v.type !== "deleteGroup" ? (
+										<div className="text-center my-2">
+											<span className="bg-info  p-2 rounded-pill ">
+												<small>
+													<small>
+														{v.username === auth.decodedToken().username
+															? v.text.replace(
+																	`admin ~${auth.decodedToken().username}`,
+																	"You"
+															  )
+															: v.text}
+													</small>
 												</small>
 											</span>
 										</div>
 									) : (
-										<div className="text-center ">
-											<span className="bg-info  p-2 rounded-pill ">
+										<div className="text-center my-2">
+											<span className="bg-danger  p-2 rounded-pill ">
 												<small>
-													<small>{v.text}</small>
+													<small>
+														{v.username === auth.decodedToken().username
+															? "You deleted the group"
+															: v.text}
+													</small>
 												</small>
 											</span>
 										</div>
