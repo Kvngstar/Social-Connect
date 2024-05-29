@@ -144,7 +144,11 @@ export default function Overview({ data, socket, setLoadedData }) {
 						className=""
 						onClick={ChangeGroupProfileImage}
 					>
-						<BiEditAlt />
+						{loading ? (
+							Loader("syncloader", loading, undefined, 8, "grey")
+						) : (
+							<BiEditAlt /> 
+						)}
 					</div>
 				)}
 			</div>
@@ -235,7 +239,8 @@ export default function Overview({ data, socket, setLoadedData }) {
 								{data.groupDescription.substring(50)}
 							</div>
 							<div onClick={ToggleAbout}>
-								{showMore ? "show less" : "show more"}
+								{data.groupDescription.length > 50 &&
+									(showMore ? "show less" : "show more")}
 							</div>
 						</div>
 					</div>

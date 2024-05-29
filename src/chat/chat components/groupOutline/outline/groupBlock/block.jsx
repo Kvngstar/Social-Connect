@@ -45,8 +45,8 @@ export default function GroupOutlineCont({ v, DisplayChats, userGroupData }) {
 				</div>
 				<div className="d-flex ps-3 justify-content-between">
 					<div
-						className="d-flex flex-column"
-						style={{ minWidth: "52px" }}
+						className="d-flex flex-column justify-content-center align-items-center"
+						style={{ minWidth: "60px" }}
 					>
 						<div>
 							<small>

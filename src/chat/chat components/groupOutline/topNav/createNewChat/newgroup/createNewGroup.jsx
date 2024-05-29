@@ -79,7 +79,7 @@ export default function CreateNewGroup({
 	async function OnchangeProfileImage() {
 		const file = document.querySelector("#file");
 		if (file.files[0].size > maxSize)
-			return toast.error("Image size should be maximum of 1mb");
+			return toast.error("image size should be less than 1MB");
 
 		const base64 = await FileReading(file.files[0]);
 
@@ -91,8 +91,13 @@ export default function CreateNewGroup({
 	return (
 		<div>
 			{" "}
-			<div className="p-1 text-dark">
-				<div className="d-flex  align-items-center mt-1 bg-light px-2 rounded py-2">
+			<div className="p-1 ">
+				<div
+					className={
+						"d-flex  align-items-center mt-1 px-2 rounded py-2 " +
+						(theme.isLight ? "white_grad2" : "dark_grad2")
+					}
+				>
 					<div className="d-flex align-items-center">
 						{newGroupData.groupIcon ? (
 							<img
