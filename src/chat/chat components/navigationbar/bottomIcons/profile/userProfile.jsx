@@ -3,6 +3,8 @@ import toast from "react-hot-toast";
 import { Login_Auth } from "../../../../../auths/context/authContext";
 import { BiEditAlt } from "react-icons/bi";
 import Button from "../../../../../components/Emoji/button/button";
+import FileReading from "../../../../../utils/filesUpload/image/image";
+import { Loader } from "../../../../../utils/loader/loader";
 export default function UserProfile({
 	userGroupData,
 	showInputFor,
@@ -10,6 +12,7 @@ export default function UserProfile({
 	socket,
 	setUserGroupData,
 }) {
+	const maxSize = 1000000;
 	const [resetProfileData, setResetProfileData] = useState({
 		type: "",
 		new: "",
